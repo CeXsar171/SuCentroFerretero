@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Su Centro Ferretero — Productos</title>
+  <link rel="stylesheet" href="styles/style.css?v=4" />
+  <link rel="stylesheet" href="styles/animations.css?v=4" />
+  <link rel="stylesheet" href="styles/grid-fix.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-row">
+      <h1 class="logo"><img src="images/CentroFerre.png" alt="Su Centro Ferretero" style="height:40px;margin-right:10px;vertical-align:middle"> Su Centro Ferretero</h1>
+      <button class="menu-toggle" id="menu-toggle">☰ Categorías</button>
+      <nav class="main-nav">
+        <a href="index.html">Inicio</a>
+        <a href="products.html">Productos</a>
+        <a href="branches.html">Sucursales</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Menú desplegable de categorías -->
+  <div class="categories-modal" id="categories-modal">
+    <div class="categories-modal-content">
+      <button class="close-modal" id="close-modal">✕</button>
+      <h2>Categorías</h2>
+      <div class="categories-list">
+        <div class="category-menu-item">
+          <button class="category-toggle">Herramientas ⬇</button>
+          <div class="subcategories-list">
+            <a href="products.html?cat=Herramientas&subcat=Manuales" onclick="filterByCategory('Herramientas', 'Manuales')">Herramientas Manuales</a>
+          </div>
+        </div>
+        <div class="category-menu-item">
+          <button class="category-toggle">Maquinaria ⬇</button>
+          <div class="subcategories-list">
+            <a href="#" onclick="filterByCategory('Maquinaria', 'Herramientas Eléctricas'); return false;">Herramientas Eléctricas</a>
+            <a href="#" onclick="filterByCategory('Maquinaria', 'Soldadura'); return false;">Soldadura</a>
+          </div>
+        </div>
+        <div class="category-menu-item">
+          <button class="category-toggle">Pintura ⬇</button>
+          <div class="subcategories-list">
+            <a href="#" onclick="filterByCategory('Pintura', 'Aplicadores'); return false;">Aplicadores</a>
+            <a href="#" onclick="filterByCategory('Pintura', 'Acabados'); return false;">Acabados</a>
+            <a href="#" onclick="filterByCategory('Pintura', 'Accesorios'); return false;">Accesorios</a>
+          </div>
+        </div>
+        <div class="category-menu-item">
+          <button class="category-toggle">Materiales ⬇</button>
+          <div class="subcategories-list">
+            <a href="#" onclick="filterByCategory('Materiales', 'Fasteners'); return false;">Fasteners</a>
+            <a href="#" onclick="filterByCategory('Materiales', 'Hardware'); return false;">Hardware</a>
+          </div>
+        </div>
+        <div class="category-menu-item">
+          <button class="category-toggle">Hogar ⬇</button>
+          <div class="subcategories-list">
+            <a href="#" onclick="filterByCategory('Hogar', 'Decoración'); return false;">Decoración</a>
+            <a href="#" onclick="filterByCategory('Hogar', 'Muebles'); return false;">Muebles</a>
+            <a href="#" onclick="filterByCategory('Hogar', 'Seguridad'); return false;">Seguridad</a>
+            <a href="#" onclick="filterByCategory('Hogar', 'Puertas'); return false;">Puertas</a>
+          </div>
+        </div>
+        <div class="category-menu-item">
+          <button class="category-toggle">Seguridad ⬇</button>
+          <div class="subcategories-list">
+            <a href="#" onclick="filterByCategory('Seguridad', 'Protección'); return false;">Protección Personal</a>
+          </div>
+        </div>
+        <div class="category-menu-item">
+          <button class="category-toggle">Medición ⬇</button>
+          <div class="subcategories-list">
+            <a href="#" onclick="filterByCategory('Medición', 'Medidores'); return false;">Medidores</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="products-hero">
+      <h2>Productos</h2>
+      <div class="search-row">
+        <input id="search" type="search" placeholder="Buscar productos por nombre o categoría" />        
+        <button id="clear-search" class="btn small">Limpiar</button>
+      </div>
+    </section>
+
+    <section id="product-list" class="product-grid" aria-live="polite">
+      <!-- Products render here -->
+    </section>
+  </main>
+
+  <a class="whatsapp-fab" href="https://wa.me/1234567890" target="_blank" rel="noopener">WhatsApp</a>
+
+  <script>
+    // Menu desplegable de categorías
+    const menuToggle = document.getElementById('menu-toggle');
+    const closeModal = document.getElementById('close-modal');
+    const modal = document.getElementById('categories-modal');
+    const categoryToggles = document.querySelectorAll('.category-toggle');
+
+    if(menuToggle){
+      menuToggle.addEventListener('click', () => {
+        modal.classList.add('active');
+      });
+    }
+
+    if(closeModal){
+      closeModal.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+    }
+
+    modal.addEventListener('click', (e) => {
+      if(e.target === modal) modal.classList.remove('active');
+    });
+
+    categoryToggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const subcategories = toggle.nextElementSibling;
+        const isActive = subcategories.classList.contains('active');
+        
+        // Close all other subcategories
+        document.querySelectorAll('.subcategories-list.active').forEach(sub => {
+          if(sub !== subcategories){
+            sub.classList.remove('active');
+            sub.previousElementSibling.classList.remove('active');
+          }
+        });
+        
+        // Toggle current
+        subcategories.classList.toggle('active');
+        toggle.classList.toggle('active');
+      });
+    });
+
+    // Función para filtrar por categoría
+    function filterByCategory(category, subcategory) {
+      const input = document.getElementById('search');
+      input.value = subcategory || category;
+      input.dispatchEvent(new Event('input'));
+      modal.classList.remove('active');
+    }
+  </script>
+
+  <script src="scripts/products.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>

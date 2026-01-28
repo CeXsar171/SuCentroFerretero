@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Su Centro Ferretero — Sucursales</title>
+  <link rel="stylesheet" href="styles/style.css?v=4" />
+  <link rel="stylesheet" href="styles/animations.css?v=4" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <style>
+    .branches-hero{padding:2rem 0;text-align:center}
+    .branches-hero h2{margin:0 0 0.5rem 0;font-size:2rem;color:#0f172a}
+    .branches-hero p{color:#6b7280;margin:0}
+    .map-section{display:grid;grid-template-columns:2fr 1fr;gap:2rem;margin:2rem 0;align-items:start}
+    .map{height:500px;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(12,18,30,0.08)}
+    .branch-list{display:flex;flex-direction:column;gap:1.5rem}
+    .branch-card{background:var(--card);padding:1.5rem;border-radius:10px;box-shadow:0 4px 12px rgba(12,18,30,0.06);border-left:4px solid var(--accent);transition:all 300ms ease}
+    .branch-card:hover{box-shadow:0 8px 20px rgba(12,18,30,0.12);transform:translateY(-2px)}
+    .branch-card h3{margin:0 0 0.75rem 0;color:var(--accent);font-size:1.1rem}
+    .branch-info{display:flex;flex-direction:column;gap:0.5rem;font-size:0.95rem}
+    .branch-info p{margin:0;color:#6b7280}
+    .branch-info strong{color:#0f172a}
+    .leaflet-popup-content{font-size:0.9rem}
+    @media(max-width:900px){
+      .map-section{grid-template-columns:1fr}
+      .map{height:350px}
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-row">
+      <h1 class="logo"><img src="images/CentroFerre.png" alt="Su Centro Ferretero" style="height:40px;margin-right:10px;vertical-align:middle"> Su Centro Ferretero</h1>
+      <nav class="main-nav">
+        <a href="index.html">Inicio</a>
+        <a href="products.html">Productos</a>
+        <a href="branches.html">Sucursales</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="branches-hero">
+      <h2>🏢 Nuestras Sucursales</h2>
+      <p>Encuentra cualquier sucursal en el mapa — haz clic en un marcador para ver detalles y direcciones.</p>
+    </section>
+
+    <section class="map-section">
+      <div id="map" class="map"></div>
+      <aside class="branch-list">
+        <div class="branch-card">
+          <h3>📍 Sucursal Centro</h3>
+          <div class="branch-info">
+            <p><strong>📍 Dirección:</strong><br>Su Centro Ferretero</p>
+            <p><strong>📞 Teléfono:</strong><br>+1 (555) 123-4567</p>
+            <p><strong>🕐 Horario:</strong><br>Lun-Vie: 9:00-18:00<br>Sab: 9:00-14:00</p>
+          </div>
+        </div>
+        <div class="branch-card">
+          <h3>📍 Sucursal Norte</h3>
+          <div class="branch-info">
+            <p><strong>📍 Dirección:</strong><br>Su Centro Ferretero Aláquez</p>
+            <p><strong>📞 Teléfono:</strong><br>+1 (555) 234-5678</p>
+            <p><strong>🕐 Horario:</strong><br>Lun-Vie: 8:00-19:00<br>Sab: 8:00-15:00</p>
+          </div>
+        </div>
+        <div class="branch-card">
+          <h3>📍 Sucursal Sur</h3>
+          <div class="branch-info">
+            <p><strong>📍 Dirección:</strong><br>Boulevard Sur - Quito</p>
+            <p><strong>📞 Teléfono:</strong><br>+1 (555) 345-6789</p>
+            <p><strong>🕐 Horario:</strong><br>Lun-Vie: 9:00-18:00<br>Sab-Dom: 10:00-16:00</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <a class="whatsapp-fab" href="https://wa.me/1234567890" target="_blank" rel="noopener">WhatsApp</a>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="scripts/branches.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>
