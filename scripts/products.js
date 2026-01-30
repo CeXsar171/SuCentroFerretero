@@ -139,6 +139,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // Check if there's a brand filter from the carousel click
   const filterBrand = sessionStorage.getItem('filterBrand');
   const filterCategory = sessionStorage.getItem('filterCategory');
+  const globalSearch = sessionStorage.getItem('globalSearch');
   let initialProducts = SAMPLE_PRODUCTS;
   
   if(filterCategory){
@@ -173,6 +174,25 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
     heroSection.appendChild(clearBrandBtn);
     sessionStorage.removeItem('filterBrand'); // Clear it after using
+  }
+
+  // Global search triggered from header
+  if(globalSearch){
+    const results = repo.search(globalSearch);
+    initialProducts = results;
+    if(input) input.value = globalSearch;
+    // Add a clear indicator
+    const heroSection = document.querySelector('.products-hero');
+    const clearSearchBtn = document.createElement('button');
+    clearSearchBtn.className = 'btn small';
+    clearSearchBtn.textContent = '✕ Limpiar Búsqueda';
+    clearSearchBtn.style.marginLeft = '10px';
+    clearSearchBtn.addEventListener('click', ()=>{
+      sessionStorage.removeItem('globalSearch');
+      window.location.href = 'products.html';
+    });
+    heroSection.appendChild(clearSearchBtn);
+    sessionStorage.removeItem('globalSearch');
   }
   
   view.render(initialProducts);

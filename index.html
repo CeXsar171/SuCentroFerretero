@@ -89,17 +89,43 @@
   </style>
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header site-header--home">
     <div class="container nav-row">
-      <a class="logo" href="index.html" title="Inicio"><img src="images/CentroFerre.png" alt="Su Centro Ferretero" style="height:52px;margin-right:4px;vertical-align:middle" /></a>
-      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir categorías">☰</button>
+      <div class="brand-controls">
+        <a class="logo" href="index.html" title="Inicio"><img src="images/CentroFerre.png" alt="Su Centro Ferretero" /></a>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Abrir categorías"><span class="hamburger" aria-hidden="true"></span></button>
+      </div>
+
       <nav class="main-nav">
         <a href="index.html">Inicio</a>
         <a href="products.html">Productos</a>
         <a href="branches.html">Sucursales</a>
       </nav>
+
+      <div class="header-search" role="search">
+        <div class="search-box">
+          <input id="header-search" type="search" placeholder="¿Qué necesitas hoy?" aria-label="Buscar" />
+          <button id="header-search-btn" class="search-btn" aria-label="Buscar">🔍</button>
+        </div>
+      </div>
     </div>
   </header>
+
+  <script>
+    // Header search: enviar término a products.html usando sessionStorage
+    (function(){
+      const input = document.getElementById('header-search');
+      const btn = document.getElementById('header-search-btn');
+      function doSearch(){
+        const q = (input && input.value || '').trim();
+        if(!q) return;
+        sessionStorage.setItem('globalSearch', q);
+        window.location.href = 'products.html';
+      }
+      if(btn) btn.addEventListener('click', doSearch);
+      if(input) input.addEventListener('keypress', (e)=>{ if(e.key === 'Enter') doSearch(); });
+    })();
+  </script>
 
   <!-- Menú desplegable de categorías -->
   <div class="categories-modal" id="categories-modal">
