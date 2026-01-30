@@ -6,7 +6,7 @@ const BRANCHES = [
     phone: '5551234567',
     lat: -0.8844806, 
     lng: -78.6153343,
-    hours: 'Lun-Vie: 9:00-18:00 | Sab: 9:00-14:00'
+    hours: 'Lun-Vie: 7:30-13:00 | 14:00-18:00 | Sab: 7:30-13:00'
   },
   { 
     id: 'b2', 
@@ -15,16 +15,16 @@ const BRANCHES = [
     phone: '5552345678',
     lat: -0.8637144, 
     lng: -78.5960969,
-    hours: 'Lun-Vie: 8:00-19:00 | Sab: 8:00-15:00'
+    hours: 'Lun-Vie: 7:30-18:00 | Sab-Dom: 8:00-13:00'
   },
   { 
     id: 'b3', 
     name: 'Sucursal Sur', 
-    address: 'Boulevard Sur - Quito',
+    address: 'Sanbuenaventura Su Centro Ferretero',
     phone: '5553456789',
     lat: -0.894306, 
     lng: -78.611986,
-    hours: 'Lun-Vie: 9:00-18:00 | Sab-Dom: 10:00-16:00'
+    hours: 'Lun-Vie: 7:30-13:00 | 14:00-18:00 | Sab: 7:30-13:00'
   },
 ];
 

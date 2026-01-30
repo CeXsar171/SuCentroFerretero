@@ -36,11 +36,9 @@
 .header-style-disensa .header-cta{display:inline-block;padding:0.6rem 1rem;border-radius:8px;border:1px solid currentColor;background:transparent;font-weight:700;text-decoration:none}
 
 @media(max-width:900px){
-  .header-style-disensa .search-box{max-width:calc(100% - 120px)}
-  .header-style-disensa .main-nav{position:static;transform:none;right:auto;top:auto;z-index:3}
-  .header-style-disensa .header-search{position:static;transform:none;width:100%;max-width:none;margin-top:0.5rem}
-  .header-style-disensa .brand-controls .logo img{height:64px}
-  .header-style-disensa .header-cta{padding:0.45rem 0.6rem;font-size:0.9rem}
+  .header-style-disensa .header-search{
+  width:clamp(260px, 35vw, 340px);
+}
 }
 
 .site-header--home .main-nav a{padding:0.6rem 0.85rem;border-radius:8px;margin-left:0.6rem;font-weight:700;color:#0f172a;transition:all 220ms ease}
@@ -189,8 +187,7 @@ input[type=search]{flex:1;padding:0.6rem;border-radius:8px;border:1px solid #e6e
 .payment-methods--small img{width:28px;height:28px;padding:1px}
 .footer-bottom{background:#ffffff;padding:1rem 0;text-align:center;font-size:0.9rem;color:#0f172a}
 
-@media(max-width:900px){
-  .footer-content{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){ .footer-content{grid-template-columns:repeat(3,1fr)}
 }
 
 /* Footer brand layout */
@@ -206,9 +203,10 @@ input[type=search]{flex:1;padding:0.6rem;border-radius:8px;border:1px solid #e6e
 .footer-logo-large{height:160px;width:auto;border-radius:6px;margin-bottom:8px}
 .brand-underline{width:120px;height:3px;background:#e53935;border:none;margin:6px 0;border-radius:2px}
 .follow-text{color:#fff;font-weight:700;margin:6px 0 10px 0}
-.footer-socials{display:flex;flex-direction:row;gap:8px;justify-content:center}
-.footer-socials a{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;background:rgba(255,255,255,0.08);border-radius:50%;color:#fff;text-decoration:none;margin:0;font-weight:700}
-.footer-socials a:hover{background:rgba(255,255,255,0.2)}
+.footer-socials img {
+  width: 40px;
+  margin: 0 8px;
+}
 .bank-logos{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:0.5rem}
 .bank-logos img{width:60px;height:auto;border-radius:4px;object-fit:contain;background:white;padding:2px}
 @media(max-width:900px){
