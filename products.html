@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="styles/grid-fix.css" />
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header header-style-disensa">
     <div class="container nav-row">
       <div class="brand-controls">
         <a class="logo" href="index.html" title="Inicio"><img src="images/CentroFerre.png" alt="Su Centro Ferretero" /></a>
@@ -20,6 +20,15 @@
         <a href="products.html">Productos</a>
         <a href="branches.html">Sucursales</a>
       </nav>
+
+      <div class="header-search" role="search">
+        <div class="search-box">
+          <button id="header-search-btn" class="search-btn search-icon" aria-label="Buscar">🔍</button>
+          <input id="search" type="search" placeholder="Busca tu producto" aria-label="Buscar" />
+        </div>
+      </div>
+
+      <div class="header-cta-wrap" aria-hidden="true"></div>
     </div>
   </header>
 
@@ -85,9 +94,15 @@
   <main class="container">
     <section class="products-hero">
       <h2>Productos</h2>
-      <div class="search-row">
-        <input id="search" type="search" placeholder="Buscar productos por nombre o categoría" />        
-        <button id="clear-search" class="btn small">Limpiar</button>
+      <div class="filter-row" style="display:flex;gap:0.75rem;align-items:center;margin-top:0.6rem;flex-wrap:wrap">
+        <select id="filter-category" style="padding:0.5rem;border-radius:6px;border:1px solid #e6e9ef">
+          <option value="">Todas las categorías</option>
+        </select>
+        <select id="filter-brand" style="padding:0.5rem;border-radius:6px;border:1px solid #e6e9ef">
+          <option value="">Todas las marcas</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:0.4rem"><input type="checkbox" id="filter-instock" /> Sólo en stock</label>
+        <button id="clear-filters" class="btn small">Limpiar filtros</button>
       </div>
     </section>
 

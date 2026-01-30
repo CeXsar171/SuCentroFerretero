@@ -197,10 +197,79 @@ document.addEventListener('DOMContentLoaded', ()=>{
   
   view.render(initialProducts);
 
-  if(input){
-    input.addEventListener('input', (e)=>{
-      const results = repo.search(e.target.value);
-      view.render(results);
-    })
+  // --- Filters UI & logic ---
+  function populateFilters(){
+    const categories = Array.from(new Set(SAMPLE_PRODUCTS.map(p=>p.category).filter(Boolean))).sort();
+    const brands = Array.from(new Set(SAMPLE_PRODUCTS.map(p=>p.brand).filter(Boolean))).sort();
+    const catEl = document.getElementById('filter-category');
+    const brandEl = document.getElementById('filter-brand');
+    categories.forEach(c=>{ const opt = document.createElement('option'); opt.value = c; opt.textContent = c; catEl.appendChild(opt); });
+    brands.forEach(b=>{ const opt = document.createElement('option'); opt.value = b; opt.textContent = b; brandEl.appendChild(opt); });
   }
+
+  function getFilters(){
+    const q = (document.getElementById('search') && document.getElementById('search').value || '').trim();
+    const category = document.getElementById('filter-category').value || null;
+    const brand = document.getElementById('filter-brand').value || null;
+    const inStock = document.getElementById('filter-instock').checked || false;
+    return {q, category, brand, inStock};
+  }
+
+  ProductRepository.prototype.filter = function(opts){
+    opts = opts || {};
+    let results = this.getAll();
+    if(opts.q) {
+      const q = opts.q.toLowerCase();
+      results = results.filter(p=> p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q)) || (p.brand && p.brand.toLowerCase().includes(q)) || (p.subcategory && p.subcategory.toLowerCase().includes(q)));
+    }
+    if(opts.category){
+      results = results.filter(p=> p.category && p.category.toLowerCase() === opts.category.toLowerCase());
+    }
+    if(opts.brand){
+      results = results.filter(p=> p.brand && p.brand.toLowerCase() === opts.brand.toLowerCase());
+    }
+    if(opts.inStock){
+      results = results.filter(p=> p.inStock);
+    }
+    return results;
+  }
+
+  function applyFiltersAndRender(){
+    const opts = getFilters();
+    const results = repo.filter(opts);
+    view.render(results);
+  }
+
+  // Populate selects
+  populateFilters();
+
+  // Wire events
+  const catEl = document.getElementById('filter-category');
+  const brandEl = document.getElementById('filter-brand');
+  const inStockEl = document.getElementById('filter-instock');
+  const clearFiltersBtn = document.getElementById('clear-filters');
+
+  if(document.getElementById('search')){
+    document.getElementById('search').addEventListener('input', applyFiltersAndRender);
+    document.getElementById('search').addEventListener('keypress', (e)=>{ if(e.key === 'Enter') applyFiltersAndRender(); });
+  }
+  catEl.addEventListener('change', applyFiltersAndRender);
+  brandEl.addEventListener('change', applyFiltersAndRender);
+  inStockEl.addEventListener('change', applyFiltersAndRender);
+  clearFiltersBtn.addEventListener('click', ()=>{
+    document.getElementById('filter-category').value = '';
+    document.getElementById('filter-brand').value = '';
+    document.getElementById('filter-instock').checked = false;
+    if(document.getElementById('search')) document.getElementById('search').value = '';
+    view.render(SAMPLE_PRODUCTS);
+  });
+
+  // Ensure initial filters (from sessionStorage or previous logic) are applied
+  if(filterCategory){ document.getElementById('filter-category').value = filterCategory; }
+  if(filterBrand){ document.getElementById('filter-brand').value = filterBrand; }
+  if(globalSearch && document.getElementById('search')){ document.getElementById('search').value = globalSearch; }
+
+  // Apply filters on load
+  applyFiltersAndRender();
+
 });

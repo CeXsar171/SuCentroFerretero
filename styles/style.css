@@ -22,6 +22,27 @@
 .site-header--home .search-box input::placeholder{color:#94a3b8}
 .site-header--home .search-btn{background:transparent;border:none;padding:0.4rem 0.6rem;cursor:pointer;color:var(--accent);font-size:1.05rem}
 
+/* Header layout (disensa-like) applied as a class so we can reuse on index and products */
+.header-style-disensa .nav-row{align-items:center;gap:1rem;position:relative}
+.header-style-disensa .brand-controls{flex:0 0 auto;z-index:3}
+/* Move main navigation to the right side and keep it vertically centered */
+.header-style-disensa .main-nav{display:flex;gap:0.6rem;align-items:center;position:absolute;right:1rem;top:50%;transform:translateY(-50%);z-index:4}
+/* Center the search and reduce its width */
+.header-style-disensa .header-search{position:absolute;left:50%;transform:translateX(-50%);display:flex;justify-content:center;width:440px;max-width:52vw;z-index:2}
+.header-style-disensa .search-box{width:100%;display:flex;align-items:center;border-radius:999px;padding:0.25rem;border:1px solid rgba(12,18,30,0.06);box-shadow:0 6px 24px rgba(12,18,30,0.08);background:var(--card)}
+.header-style-disensa .search-box .search-icon{background:transparent;border:none;padding:0.6rem 0.8rem;border-radius:999px;margin-right:0.5rem}
+.header-style-disensa .search-box input{border:none;padding:0.75rem 1rem;font-size:0.98rem;border-radius:999px;width:100%;outline:none}
+.header-style-disensa .header-cta-wrap{flex:0 0 auto;margin-left:1rem}
+.header-style-disensa .header-cta{display:inline-block;padding:0.6rem 1rem;border-radius:8px;border:1px solid currentColor;background:transparent;font-weight:700;text-decoration:none}
+
+@media(max-width:900px){
+  .header-style-disensa .search-box{max-width:calc(100% - 120px)}
+  .header-style-disensa .main-nav{position:static;transform:none;right:auto;top:auto;z-index:3}
+  .header-style-disensa .header-search{position:static;transform:none;width:100%;max-width:none;margin-top:0.5rem}
+  .header-style-disensa .brand-controls .logo img{height:64px}
+  .header-style-disensa .header-cta{padding:0.45rem 0.6rem;font-size:0.9rem}
+}
+
 .site-header--home .main-nav a{padding:0.6rem 0.85rem;border-radius:8px;margin-left:0.6rem;font-weight:700;color:#0f172a;transition:all 220ms ease}
 .site-header--home .main-nav a:hover{background:linear-gradient(90deg,rgba(11,121,208,0.06),rgba(11,121,208,0.02));color:var(--accent);transform:translateY(-2px)}
 
