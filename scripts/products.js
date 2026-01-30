@@ -105,7 +105,28 @@ const SAMPLE_PRODUCTS = [
   {id:36,name:'Cinta Métrica de 5m',category:'Medición',subcategory:'Medidores',brand:'Stanley',inStock:true,image:'https://picsum.photos/seed/tape2/400/300'},
   {id:37,name:'Nivel de Burbuja',category:'Medición',subcategory:'Medidores',brand:'Stabila',inStock:true,image:'https://picsum.photos/seed/level1/400/300'},
   {id:38,name:'Transportador Angular',category:'Medición',subcategory:'Medidores',brand:'Starrett',inStock:false,image:'https://picsum.photos/seed/protractor1/400/300'},
-  {id:39,name:'Brújula Magnética',category:'Medición',subcategory:'Medidores',brand:'Suunto',inStock:true,image:'https://picsum.photos/seed/compass1/400/300'}
+  {id:39,name:'Brújula Magnética',category:'Medición',subcategory:'Medidores',brand:'Suunto',inStock:true,image:'https://picsum.photos/seed/compass1/400/300'},
+
+  // Nuevos productos añadidos por marca (usando imágenes locales disponibles en /images)
+  {id:40,name:'Cinta Métrica DeWalt 8m',category:'Medición',subcategory:'Medidores',brand:'DeWalt',inStock:true,image:'images/DeWalt.png'},
+  {id:41,name:'Set de Llaves Stanley 12 pz',category:'Herramientas',subcategory:'Manuales',brand:'Stanley',inStock:true,image:'images/Stanley.png'},
+  {id:42,name:'Juego de Brocas Irwin 10 pz',category:'Herramientas',subcategory:'Accesorios',brand:'Irwin',inStock:true,image:'images/irwin.png'},
+  {id:43,name:'Cinta de Enmascarar 3M 48mm',category:'Pintura',subcategory:'Accesorios',brand:'3M',inStock:true,image:'images/Logo-3M.png'},
+  {id:44,name:'Juego de Brocas Truper 8 pz',category:'Herramientas',subcategory:'Manuales',brand:'Truper',inStock:true,image:'images/truper.png'},
+  {id:45,name:'Regleta Tigre 20cm',category:'Materiales',subcategory:'Hardware',brand:'Tigre',inStock:true,image:'images/tigre.png'},
+  {id:46,name:'Lija Norton grano 80',category:'Maquinaria',subcategory:'Herramientas Eléctricas',brand:'Norton',inStock:true,image:'images/norton.png'},
+  {id:47,name:'Termofusible Plastigama 250ml',category:'Materiales',subcategory:'Accesorios',brand:'Plastigama',inStock:true,image:'images/Plastigama.jpg'},
+  {id:48,name:'Alicate VETO 8"',category:'Herramientas',subcategory:'Manuales',brand:'VETO',inStock:true,image:'images/VETO.png'},
+  {id:49,name:'Cable Volteck 2.5mm (10m)',category:'Materiales',subcategory:'Hardware',brand:'Volteck',inStock:true,image:'images/volteck.png'},
+  {id:50,name:'Martillo Ingco 16oz',category:'Herramientas',subcategory:'Manuales',brand:'Ingco',inStock:true,image:'images/Ingco.png'},
+  {id:51,name:'Adhesivo Selva Alegre 300ml',category:'Materiales',subcategory:'Accesorios',brand:'Selva Alegre',inStock:true,image:'images/selvalegre.png'},
+
+  // Productos añadidos para nuevas imágenes subidas
+  {id:52,name:'Refrigerador Edesa 220L',category:'Hogar',subcategory:'Electrodomésticos',brand:'Edesa',inStock:true,image:'images/edesa.jpg'},
+  {id:53,name:'Grifería FV Monomando',category:'Hogar',subcategory:'Accesorios',brand:'FV',inStock:true,image:'images/fv.png'},
+  {id:54,name:'Bombillo LED Sylvania 9W',category:'Hogar',subcategory:'Iluminación',brand:'Sylvania',inStock:true,image:'images/Sylvania.png'},
+  {id:55,name:'Silicona Sika 300ml',category:'Materiales',subcategory:'Accesorios',brand:'Sika',inStock:true,image:'images/sika.png'},
+  {id:56,name:'Interruptor Intaco 1P',category:'Materiales',subcategory:'Hardware',brand:'Intaco',inStock:true,image:'images/intaco.png'}
 ];
 
 const repo = new ProductRepository(SAMPLE_PRODUCTS);

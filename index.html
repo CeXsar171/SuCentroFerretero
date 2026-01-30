@@ -91,8 +91,8 @@
 <body>
   <header class="site-header">
     <div class="container nav-row">
-      <h1 class="logo"><img src="images/CentroFerre.png" alt="Su Centro Ferretero" style="height:40px;margin-right:10px;vertical-align:middle"> Su Centro Ferretero</h1>
-      <button class="menu-toggle" id="menu-toggle">☰ Categorías</button>
+      <a class="logo" href="index.html" title="Inicio"><img src="images/CentroFerre.png" alt="Su Centro Ferretero" style="height:52px;margin-right:4px;vertical-align:middle" /></a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir categorías">☰</button>
       <nav class="main-nav">
         <a href="index.html">Inicio</a>
         <a href="products.html">Productos</a>
@@ -228,29 +228,68 @@
           <button class="carousel-btn prev" onclick="scrollCarousel('brands', -1)">❮</button>
           <div class="brands-carousel" id="brands-carousel">
           <div class="carousel-track">
-            <div class="brand-item" data-brand="Stanley">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Stanley_logo.svg/1200px-Stanley_logo.svg.png" alt="Stanley" title="Stanley" />
+            <div class="brand-item" data-brand="Stanley" role="button" tabindex="0">
+              <img src="images/Stanley.png" alt="Stanley" title="Stanley" />
             </div>
-            <div class="brand-item" data-brand="DeWalt">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/DeWalt_Logo.svg/1200px-DeWalt_Logo.svg.png" alt="DeWalt" title="DeWalt" />
+            <div class="brand-item" data-brand="DeWalt" role="button" tabindex="0">
+              <img src="images/DeWalt.png" alt="DeWalt" title="DeWalt" />
             </div>
-            <div class="brand-item" data-brand="Bosch">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Bosch_logo.svg/1200px-Bosch_logo.svg.png" alt="Bosch" title="Bosch" />
+            <div class="brand-item" data-brand="Irwin" role="button" tabindex="0">
+              <img src="images/irwin.png" alt="Irwin" title="Irwin" />
             </div>
-            <div class="brand-item" data-brand="Makita">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Makita_logo.svg/1200px-Makita_logo.svg.png" alt="Makita" title="Makita" />
+            <div class="brand-item" data-brand="3M" role="button" tabindex="0">
+              <img src="images/Logo-3M.png" alt="3M" title="3M" />
             </div>
-            <div class="brand-item" data-brand="Craftsman">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Craftsman_logo.svg/1200px-Craftsman_logo.svg.png" alt="Craftsman" title="Craftsman" />
+            <div class="brand-item" data-brand="Truper" role="button" tabindex="0">
+              <img src="images/truper.png" alt="Truper" title="Truper" />
             </div>
-            <div class="brand-item" data-brand="3M">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/3M_Logo.svg/1200px-3M_Logo.svg.png" alt="3M" title="3M" />
+            <div class="brand-item" data-brand="Tigre" role="button" tabindex="0">
+              <img src="images/tigre.png" alt="Tigre" title="Tigre" />
             </div>
-            <div class="brand-item" data-brand="Black+Decker">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Black_and_Decker_logo.svg/1200px-Black_and_Decker_logo.svg.png" alt="Black+Decker" title="Black+Decker" />
+            <div class="brand-item" data-brand="Norton" role="button" tabindex="0">
+              <img src="images/norton.png" alt="Norton" title="Norton" />
             </div>
-            <div class="brand-item" data-brand="Irwin">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Irwin_Tools_logo.svg/1200px-Irwin_Tools_logo.svg.png" alt="Irwin" title="Irwin" />
+            <div class="brand-item" data-brand="Plastigama" role="button" tabindex="0">
+              <img src="images/Plastigama.jpg" alt="Plastigama" title="Plastigama" />
+            </div>
+            <div class="brand-item" data-brand="VETO" role="button" tabindex="0">
+              <img src="images/VETO.png" alt="VETO" title="VETO" />
+            </div>
+            <div class="brand-item" data-brand="Volteck" role="button" tabindex="0">
+              <img src="images/volteck.png" alt="Volteck" title="Volteck" />
+            </div>
+            <div class="brand-item" data-brand="Ingco" role="button" tabindex="0">
+              <img src="images/Ingco.png" alt="Ingco" title="Ingco" />
+            </div>
+            <div class="brand-item" data-brand="Maviju" role="button" tabindex="0">
+              <img src="images/maviju.png" alt="Maviju" title="Maviju" />
+            </div>
+            <div class="brand-item" data-brand="Mercury" role="button" tabindex="0">
+              <img src="images/Mercury.jpg" alt="Mercury" title="Mercury" />
+            </div>
+            <div class="brand-item" data-brand="Rival" role="button" tabindex="0">
+              <img src="images/rival.png" alt="Rival" title="Rival" />
+            </div>
+            <div class="brand-item" data-brand="Selva Alegre" role="button" tabindex="0">
+              <img src="images/selvalegre.png" alt="Selva Alegre" title="Selva Alegre" />
+            </div>
+            <div class="brand-item" data-brand="Edesa" role="button" tabindex="0">
+              <img src="images/edesa.jpg" alt="Edesa" title="Edesa" />
+            </div>
+            <div class="brand-item" data-brand="FV" role="button" tabindex="0">
+              <img src="images/fv.png" alt="FV" title="FV" />
+            </div>
+            <div class="brand-item" data-brand="Sika" role="button" tabindex="0">
+              <img src="images/sika.png" alt="Sika" title="Sika" />
+            </div>
+            <div class="brand-item" data-brand="Sylvania" role="button" tabindex="0">
+              <img src="images/Sylvania.png" alt="Sylvania" title="Sylvania" />
+            </div>
+            <div class="brand-item" data-brand="Intaco" role="button" tabindex="0">
+              <img src="images/intaco.png" alt="Intaco" title="Intaco" />
+            </div>
+            <div class="brand-item" data-brand="Adelca" role="button" tabindex="0">
+              <img src="images/Adelca.png" alt="Adelca" title="Adelca" />
             </div>
           </div>
         </div>
@@ -273,7 +312,7 @@
           <a href="#" title="YouTube">▶️</a>
         </div>
       </div>
-      
+
       <div class="footer-column">
         <h3 style="margin-top:0">Su Centro Ferretero</h3>
         <p style="max-width:520px">Tu aliado estratégico para proyectos profesionales, domésticos, remodelaciones y equipamiento diario que tu hogar, pequeño negocio, emprendimiento o empresa requiere para transformar tu hogar o lugar de trabajo.</p>
@@ -369,6 +408,20 @@
         // Toggle current
         subcategories.classList.toggle('active');
         toggle.classList.toggle('active');
+      });
+    });
+
+    // Marca: al hacer click, guardar filtro y navegar a la página de productos
+    document.querySelectorAll('.brand-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const brand = item.dataset.brand || item.getAttribute('data-brand');
+        if(brand){
+          sessionStorage.setItem('filterBrand', brand);
+          window.location.href = 'products.html';
+        }
+      });
+      item.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') item.click();
       });
     });
   </script>
