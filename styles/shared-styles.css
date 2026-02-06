@@ -1,0 +1,221 @@
+/* ===================================
+   ESTILOS COMPARTIDOS PARA PÁGINAS INFORMATIVAS
+   =================================== */
+
+/* Hero section para páginas informativas */
+.about-hero {
+  background: linear-gradient(135deg, #0b79d0 0%, #054a99 100%);
+  color: white;
+  padding: 3rem 0;
+  text-align: center;
+  margin-bottom: 3rem;
+  border-radius: 10px;
+}
+
+.about-hero h1 {
+  font-size: 2.5rem;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+}
+
+.about-hero p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Secciones de información */
+.info-section {
+  margin-bottom: 3rem;
+}
+
+.info-section h2 {
+  color: #0b79d0;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid #e53935;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.info-section p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #0f172a;
+  max-width: 800px;
+  margin-bottom: 1rem;
+}
+
+.info-section ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.info-section li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+/* Contenido de políticas */
+.policy-content {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.policy-content h3 {
+  color: #054a99;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.policy-content h3:first-child {
+  margin-top: 0;
+}
+
+.policy-content p,
+.policy-content ul {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+
+.policy-content ul {
+  margin-left: 1.5rem;
+}
+
+.policy-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+/* ===================================
+   ESTILOS PARA INDEX.HTML - HERO
+   =================================== */
+
+/* Hero principal de inicio */
+.hero {
+  background: linear-gradient(135deg, #0b79d0 0%, #054a99 100%);
+  color: white;
+  padding: 3rem 0;
+  text-align: center;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.hero h2 {
+  font-size: 2.5rem;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.hero .btn {
+  background: #dc2626;
+  margin-top: 1rem;
+  display: inline-block;
+  font-size: 1.05rem;
+  padding: 0.8rem 2rem;
+}
+
+.hero .btn:hover {
+  background: #b91c1c;
+}
+
+/* ===================================
+   ESTILOS PARA BRANCHES.HTML
+   =================================== */
+
+.branches-hero {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.branches-hero h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: #0f172a;
+}
+
+.branches-hero p {
+  color: #6b7280;
+  margin: 0;
+}
+
+.map-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin: 2rem 0;
+  align-items: start;
+}
+
+.map {
+  height: 500px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(12, 18, 30, 0.08);
+}
+
+.branch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.branch-card {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(12, 18, 30, 0.06);
+  border-left: 4px solid #0b79d0;
+  transition: all 300ms ease;
+}
+
+.branch-card:hover {
+  box-shadow: 0 8px 20px rgba(12, 18, 30, 0.12);
+  transform: translateY(-2px);
+}
+
+.branch-card h3 {
+  margin: 0 0 0.75rem 0;
+  color: #0b79d0;
+  font-size: 1.1rem;
+}
+
+.branch-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.branch-info p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.branch-info strong {
+  color: #0f172a;
+}
+
+.leaflet-popup-content {
+  font-size: 0.9rem;
+}
+
+/* Responsive para mapa de sucursales */
+@media (max-width: 900px) {
+  .map-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .map {
+    height: 350px;
+  }
+}
