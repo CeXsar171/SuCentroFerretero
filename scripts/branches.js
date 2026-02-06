@@ -3,7 +3,7 @@ const BRANCHES = [
     id: 'b1', 
     name: 'Sucursal Centro', 
     address: 'Su Centro Ferretero',
-    phone: '5551234567',
+    phone: '0985569688',
     lat: -0.8844806, 
     lng: -78.6153343,
     hours: 'Lun-Vie: 7:30-13:00 | 14:00-18:00 | Sab: 7:30-13:00'
@@ -12,7 +12,7 @@ const BRANCHES = [
     id: 'b2', 
     name: 'Sucursal Norte', 
     address: 'Su Centro Ferretero Aláquez',
-    phone: '5552345678',
+    phone: '0959580248',
     lat: -0.8637144, 
     lng: -78.5960969,
     hours: 'Lun-Vie: 7:30-18:00 | Sab-Dom: 8:00-13:00'
@@ -21,7 +21,7 @@ const BRANCHES = [
     id: 'b3', 
     name: 'Sucursal Sur', 
     address: 'Sanbuenaventura Su Centro Ferretero',
-    phone: '5553456789',
+    phone: '0985569688',
     lat: -0.894306, 
     lng: -78.611986,
     hours: 'Lun-Vie: 7:30-13:00 | 14:00-18:00 | Sab: 7:30-13:00'
