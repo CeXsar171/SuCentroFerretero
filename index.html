@@ -4,89 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Su Centro Ferretero — Inicio</title>
-  <link rel="stylesheet" href="styles/style.css?v=4" />
-  <link rel="stylesheet" href="styles/animations.css?v=4" />
-  <style>
-    .hero {
-      background: linear-gradient(135deg, #0b79d0 0%, #054a99 100%);
-      color: white;
-      padding: 3rem 0;
-      text-align: center;
-      margin-bottom: 2rem;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .hero h2 {
-      font-size: 2.5rem;
-      margin: 0 0 1rem 0;
-      font-weight: 700;
-    }
-    .hero p {
-      font-size: 1.1rem;
-      margin: 0.5rem 0;
-    }
-    .hero .btn {
-      background: #dc2626;
-      margin-top: 1rem;
-      display: inline-block;
-      font-size: 1.05rem;
-      padding: 0.8rem 2rem;
-    }
-    .hero .btn:hover {
-      background: #b91c1c;
-    }
-    
-    .categories-section {
-      margin: 3rem 0;
-    }
-    .categories-section h2 {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 2rem;
-      color: #0f172a;
-    }
-    .categories-carousel {
-      width: 100%;
-      overflow: auto;
-      padding: 1rem 0;
-    }
-    .categories-track {
-      display: flex;
-      gap: 1.5rem;
-      padding: 0 1rem;
-    }
-    .category-card {
-      flex: 0 0 140px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1.5rem;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(12,18,30,0.06);
-      transition: all 300ms ease;
-      cursor: pointer;
-      text-decoration: none;
-      color: #0f172a;
-      border: 2px solid transparent;
-    }
-    .category-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 30px rgba(12,18,30,0.15);
-      border-color: #0b79d0;
-    }
-    .category-card .icon {
-      font-size: 2.5rem;
-      line-height: 1;
-    }
-    .category-card p {
-      font-weight: 600;
-      text-align: center;
-      font-size: 0.9rem;
-      margin: 0;
-    }
-  </style>
+  <link rel="stylesheet" href="styles/style.css?v=5" />
+  <link rel="stylesheet" href="styles/shared-styles.css?v=5" />
+  <link rel="stylesheet" href="styles/animations.css?v=5" />
 </head>
 <body>
   <header class="site-header site-header--home header-search">
@@ -109,14 +29,12 @@
         </div>
       </div>
 
-      <div class="header-cta-wrap" aria-hidden="true">
-        <!-- placeholder for CTA if desired -->
-      </div>
+      <div class="header-cta-wrap" aria-hidden="true"></div>
     </div>
   </header>
 
   <script>
-    // Header search: enviar término a products.html usando sessionStorage
+    // Header search
     (function(){
       const input = document.getElementById('header-search');
       const btn = document.getElementById('header-search-btn');
@@ -140,50 +58,50 @@
         <div class="category-menu-item">
           <button class="category-toggle">Herramientas ⬇</button>
           <div class="subcategories-list">
-            <a href="products.html?cat=Herramientas&subcat=Manuales">Herramientas Manuales</a>
+            <a href="#" onclick="filterByCategory('Herramientas', 'Manuales'); return false;">Herramientas Manuales</a>
+            <a href="#" onclick="filterByCategory('Herramientas', 'Eléctricas'); return false;">Herramientas Eléctricas</a>
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Maquinaria ⬇</button>
+          <button class="category-toggle">Tecnología ⬇</button>
           <div class="subcategories-list">
-            <a href="products.html?cat=Maquinaria&subcat=Herramientas Eléctricas">Herramientas Eléctricas</a>
-            <a href="products.html?cat=Maquinaria&subcat=Soldadura">Soldadura</a>
+            <a href="#" onclick="filterByCategory('Tecnología', 'Seguridad'); return false;">Cámaras y Seguridad</a>
+            <a href="#" onclick="filterByCategory('Tecnología', 'Domótica'); return false;">Domótica</a>
+          </div>
+        </div>
+        <div class="category-menu-item">
+          <button class="category-toggle">Baños ⬇</button>
+          <div class="subcategories-list">
+            <a href="#" onclick="filterByCategory('Baños', 'Grifería'); return false;">Grifería</a>
+            <a href="#" onclick="filterByCategory('Baños', 'Accesorios'); return false;">Accesorios</a>
           </div>
         </div>
         <div class="category-menu-item">
           <button class="category-toggle">Pintura ⬇</button>
           <div class="subcategories-list">
-            <a href="products.html?cat=Pintura&subcat=Aplicadores">Aplicadores</a>
-            <a href="products.html?cat=Pintura&subcat=Acabados">Acabados</a>
-            <a href="products.html?cat=Pintura&subcat=Accesorios">Accesorios</a>
+            <a href="#" onclick="filterByCategory('Pintura', 'Aplicadores'); return false;">Aplicadores</a>
+            <a href="#" onclick="filterByCategory('Pintura', 'Acabados'); return false;">Acabados</a>
           </div>
         </div>
         <div class="category-menu-item">
           <button class="category-toggle">Materiales ⬇</button>
           <div class="subcategories-list">
-            <a href="products.html?cat=Materiales&subcat=Fasteners">Fasteners</a>
-            <a href="products.html?cat=Materiales&subcat=Hardware">Hardware</a>
+            <a href="#" onclick="filterByCategory('Materiales', 'Fasteners'); return false;">Fasteners</a>
+            <a href="#" onclick="filterByCategory('Materiales', 'Hardware'); return false;">Hardware</a>
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Hogar ⬇</button>
+          <button class="category-toggle">Iluminación ⬇</button>
           <div class="subcategories-list">
-            <a href="products.html?cat=Hogar&subcat=Decoración">Decoración</a>
-            <a href="products.html?cat=Hogar&subcat=Muebles">Muebles</a>
-            <a href="products.html?cat=Hogar&subcat=Seguridad">Seguridad</a>
-            <a href="products.html?cat=Hogar&subcat=Puertas">Puertas</a>
+            <a href="#" onclick="filterByCategory('Iluminación', 'LED'); return false;">LED</a>
+            <a href="#" onclick="filterByCategory('Iluminación', 'Decorativa'); return false;">Decorativa</a>
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Seguridad ⬇</button>
+          <button class="category-toggle">Plomería ⬇</button>
           <div class="subcategories-list">
-            <a href="products.html?cat=Seguridad&subcat=Protección">Protección Personal</a>
-          </div>
-        </div>
-        <div class="category-menu-item">
-          <button class="category-toggle">Medición ⬇</button>
-          <div class="subcategories-list">
-            <a href="products.html?cat=Medición&subcat=Medidores">Medidores</a>
+            <a href="#" onclick="filterByCategory('Plomería', 'Tuberías'); return false;">Tuberías</a>
+            <a href="#" onclick="filterByCategory('Plomería', 'Válvulas'); return false;">Válvulas</a>
           </div>
         </div>
       </div>
@@ -198,6 +116,7 @@
       <a class="btn" href="products.html">Ver Todos los Productos</a>
     </section>
 
+    <!-- TODAS LAS CATEGORÍAS -->
     <section class="categories-section">
       <div class="container">
         <h2>Explora nuestras categorías</h2>
@@ -205,29 +124,93 @@
           <button class="carousel-btn prev" onclick="scrollCarousel('categories', -1)">❮</button>
           <div class="categories-carousel" id="categories-carousel">
             <div class="categories-track">
-              <a href="products.html" class="category-card" onclick="filterByCategory('Herramientas')">
-                <span class="icon">⚙️</span>
-                <p>Herramientas</p>
+              <a href="#" class="category-card" onclick="filterByCategory('Hogar'); return false;">
+                <span class="icon">🏠</span>
+                <p>Hogar</p>
               </a>
-              <a href="products.html" class="category-card" onclick="filterByCategory('Materiales')">
-                <span class="icon">🔩</span>
-                <p>Materiales</p>
-              </a>
-              <a href="products.html" class="category-card" onclick="filterByCategory('Pintura')">
-                <span class="icon">🎨</span>
-                <p>Pintura</p>
-              </a>
-              <a href="products.html" class="category-card" onclick="filterByCategory('Maquinaria')">
+              <a href="#" class="category-card" onclick="filterByCategory('Eléctrico'); return false;">
                 <span class="icon">⚡</span>
-                <p>Maquinaria</p>
+                <p>Eléctrico</p>
               </a>
-              <a href="products.html" class="category-card" onclick="filterByCategory('Seguridad')">
-                <span class="icon">🛠️</span>
-                <p>Seguridad</p>
+              <a href="#" class="category-card" onclick="filterByCategory('Mascotas'); return false;">
+                <span class="icon">🐕</span>
+                <p>Mascotas</p>
               </a>
-              <a href="products.html" class="category-card" onclick="filterByCategory('Medición')">
-                <span class="icon">📏</span>
-                <p>Medición</p>
+              <a href="#" class="category-card" onclick="filterByCategory('Herramientas'); return false;">
+                <span class="icon">🔧</span>
+                <p>Herramientas Eléctricas</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Ferretería'); return false;">
+                <span class="icon">🔩</span>
+                <p>Ferretería</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Automotriz'); return false;">
+                <span class="icon">🚗</span>
+                <p>Automotriz</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Pisos'); return false;">
+                <span class="icon">📦</span>
+                <p>Pisos</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Materiales'); return false;">
+                <span class="icon">🧱</span>
+                <p>Material Eléctrico</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Baños'); return false;">
+                <span class="icon">🚿</span>
+                <p>Baños</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Iluminación'); return false;">
+                <span class="icon">💡</span>
+                <p>Iluminación</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Muebles'); return false;">
+                <span class="icon">🪑</span>
+                <p>Muebles</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Pintura'); return false;">
+                <span class="icon">🎨</span>
+                <p>Pinturas</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Plomería'); return false;">
+                <span class="icon">🔧</span>
+                <p>Plomería</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Jardín'); return false;">
+                <span class="icon">🌱</span>
+                <p>Jardín</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Limpieza'); return false;">
+                <span class="icon">🧹</span>
+                <p>Limpieza</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Tecnología'); return false;">
+                <span class="icon">📺</span>
+                <p>Tecnología y Domótica</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Máquinas'); return false;">
+                <span class="icon">⚙️</span>
+                <p>Máquinas</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Deportes'); return false;">
+                <span class="icon">⛺</span>
+                <p>Deportes</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Señalética'); return false;">
+                <span class="icon">⚠️</span>
+                <p>Señalética</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Seguridad'); return false;">
+                <span class="icon">🦺</span>
+                <p>Seguridad Industrial</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Cocina'); return false;">
+                <span class="icon">🍳</span>
+                <p>Decoración de Cocina</p>
+              </a>
+              <a href="#" class="category-card" onclick="filterByCategory('Puertas'); return false;">
+                <span class="icon">🚪</span>
+                <p>Puertas y Ventanas</p>
               </a>
             </div>
           </div>
@@ -236,6 +219,96 @@
       </div>
     </section>
 
+    <!-- PRODUCTOS DESTACADOS - TECNOLOGÍA -->
+    <section class="featured-products">
+      <div class="container">
+        <h2 class="section-title">
+          <span class="icon">📺</span> Tecnología y domótica para tu hogar
+        </h2>
+        <p class="section-subtitle">Innovación y entretenimiento que se adaptan a tu estilo</p>
+        
+        <div class="products-carousel-wrapper">
+          <button class="carousel-btn prev" onclick="scrollCarousel('tech', -1)">❮</button>
+          <div class="products-carousel" id="tech-carousel">
+            <div class="products-track">
+              <!-- Producto 1 -->
+              <div class="featured-product-card">
+                <span class="discount-badge">-37%</span>
+                <img src="https://picsum.photos/seed/tech1/300/300" alt="Enchufe Smart">
+                <div class="product-info">
+                  <p class="brand">NEXXT</p>
+                  <h3>Enchufe Smart dual con conexión WiFi para exteriores</h3>
+                  <p class="sku">SKU: 458979</p>
+                  <p class="price">$23,00 <span class="old-price">$36,42</span></p>
+                  <p class="installments">Incluye IVA<br>1 cuotas de $23,00 sin interés</p>
+                  <button class="btn-add">AGREGAR</button>
+                </div>
+              </div>
+              
+              <!-- Producto 2 -->
+              <div class="featured-product-card">
+                <span class="discount-badge">-17%</span>
+                <img src="https://picsum.photos/seed/tech2/300/300" alt="Cámara WiFi">
+                <div class="product-info">
+                  <p class="brand">NEXXT</p>
+                  <h3>Cámara WiFi exterior/sensor de movimiento 350°</h3>
+                  <p class="sku">SKU: 560864</p>
+                  <p class="price">$49,95 <span class="old-price">$59,99</span></p>
+                  <p class="installments">Incluye IVA<br>3 cuotas de $16,65 sin interés</p>
+                  <button class="btn-add">AGREGAR</button>
+                </div>
+              </div>
+              
+              <!-- Producto 3 -->
+              <div class="featured-product-card">
+                <span class="discount-badge">-27%</span>
+                <img src="https://picsum.photos/seed/tech3/300/300" alt="Televisor">
+                <div class="product-info">
+                  <p class="brand">INDURAMA</p>
+                  <h3>Televisor ON THE GO HD de 32" con ANDROID TV 11</h3>
+                  <p class="sku">SKU: 450645</p>
+                  <p class="price">$505,31 <span class="old-price">$689,00</span></p>
+                  <p class="installments">Incluye IVA<br>12 cuotas de $42,10 sin interés</p>
+                  <button class="btn-add">AGREGAR</button>
+                </div>
+              </div>
+              
+              <!-- Producto 4 -->
+              <div class="featured-product-card">
+                <span class="discount-badge">-12%</span>
+                <img src="https://picsum.photos/seed/tech4/300/300" alt="Cámara Seguridad">
+                <div class="product-info">
+                  <p class="brand">STEREN</p>
+                  <h3>Cámara de seguridad WiFi con detector de movimiento</h3>
+                  <p class="sku">SKU: 560801</p>
+                  <p class="price">$34,99 <span class="old-price">$39,95</span></p>
+                  <p class="installments">Incluye IVA<br>3 cuotas de $11,66 sin interés</p>
+                  <button class="btn-add">AGREGAR</button>
+                </div>
+              </div>
+              
+              <!-- Producto 5 -->
+              <div class="featured-product-card">
+                <span class="discount-badge">-11%</span>
+                <img src="https://picsum.photos/seed/tech5/300/300" alt="KIT Cámara Smart">
+                <div class="product-info">
+                  <p class="brand">NEXXT</p>
+                  <h3>KIT cámara Smart inalámbrica para interiores y exteriores</h3>
+                  <p class="sku">SKU: 560883</p>
+                  <p class="price">$79,99 <span class="old-price">$89,95</span></p>
+                  <p class="installments">Incluye IVA<br>6 cuotas de $13,33 sin interés</p>
+                  <button class="btn-add">AGREGAR</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-btn next" onclick="scrollCarousel('tech', 1)">❯</button>
+        </div>
+        <a href="products.html?cat=Tecnología" class="btn-view-more">VER MÁS</a>
+      </div>
+    </section>
+
+    <!-- Features -->
     <section class="container features">
       <div class="feature-card">
         <h3>🔍 Búsqueda Rápida</h3>
@@ -251,6 +324,7 @@
       </div>
     </section>
 
+    <!-- Marcas -->
     <section class="brands-section">
       <div class="container">
         <h2>Marcas con las que trabajamos</h2>
@@ -291,18 +365,6 @@
             <div class="brand-item" data-brand="Ingco" role="button" tabindex="0">
               <img src="images/Ingco.png" alt="Ingco" title="Ingco" />
             </div>
-            <div class="brand-item" data-brand="Maviju" role="button" tabindex="0">
-              <img src="images/maviju.png" alt="Maviju" title="Maviju" />
-            </div>
-            <div class="brand-item" data-brand="Mercury" role="button" tabindex="0">
-              <img src="images/Mercury.jpg" alt="Mercury" title="Mercury" />
-            </div>
-            <div class="brand-item" data-brand="Rival" role="button" tabindex="0">
-              <img src="images/rival.png" alt="Rival" title="Rival" />
-            </div>
-            <div class="brand-item" data-brand="Selva Alegre" role="button" tabindex="0">
-              <img src="images/selvalegre.png" alt="Selva Alegre" title="Selva Alegre" />
-            </div>
             <div class="brand-item" data-brand="Edesa" role="button" tabindex="0">
               <img src="images/edesa.jpg" alt="Edesa" title="Edesa" />
             </div>
@@ -311,12 +373,6 @@
             </div>
             <div class="brand-item" data-brand="Sika" role="button" tabindex="0">
               <img src="images/sika.png" alt="Sika" title="Sika" />
-            </div>
-            <div class="brand-item" data-brand="Sylvania" role="button" tabindex="0">
-              <img src="images/Sylvania.png" alt="Sylvania" title="Sylvania" />
-            </div>
-            <div class="brand-item" data-brand="Intaco" role="button" tabindex="0">
-              <img src="images/intaco.png" alt="Intaco" title="Intaco" />
             </div>
             <div class="brand-item" data-brand="Adelca" role="button" tabindex="0">
               <img src="images/Adelca.png" alt="Adelca" title="Adelca" />
@@ -336,21 +392,10 @@
         <hr class="brand-underline" />
         <p class="follow-text">Síguenos en nuestras redes sociales</p>
        <div class="footer-socials">
-  <a href="#">
-    <img src="RedesSociales/facebook.png">
-  </a>
-
-  <a href="#">
-    <img src="RedesSociales/tiktok.png">
-  </a>
-
-  <a href="#">
-    <img src="RedesSociales/instagram.png">
-  </a>
-
-  <a href="#">
-    <img src="RedesSociales/youtube.png" alt="YouTube">
-  </a>
+  <a href="#"><img src="RedesSociales/facebook.png" alt="Facebook"></a>
+  <a href="#"><img src="RedesSociales/tiktok.png" alt="TikTok"></a>
+  <a href="#"><img src="RedesSociales/instagram.png" alt="Instagram"></a>
+  <a href="#"><img src="RedesSociales/youtube.png" alt="YouTube"></a>
 </div>
       </div>
 
@@ -374,7 +419,6 @@
         <h4>Ubicaciones</h4>
         <ul>
           <li><a href="branches.html">Nuestros Locales</a></li>
-        
         </ul>
       </div>  
 
@@ -399,7 +443,7 @@
     </div>
   </footer>
 
-  <a class="whatsapp-fab" href="https://wa.me/0985569688" target="_blank" rel="noopener">WhatsApp</a>
+  <a class="whatsapp-fab" href="https://wa.me/1234567890" target="_blank" rel="noopener">WhatsApp</a>
 
   <script>
     // Función para hacer scroll en carruseles
@@ -438,7 +482,6 @@
     categoryToggles.forEach(toggle => {
       toggle.addEventListener('click', () => {
         const subcategories = toggle.nextElementSibling;
-        const isActive = subcategories.classList.contains('active');
         
         // Close all other subcategories
         document.querySelectorAll('.subcategories-list.active').forEach(sub => {

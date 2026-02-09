@@ -4,9 +4,44 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Su Centro Ferretero — Productos</title>
-  <link rel="stylesheet" href="styles/style.css?v=4" />
-  <link rel="stylesheet" href="styles/animations.css?v=4" />
-  <link rel="stylesheet" href="styles/grid-fix.css" />
+  <link rel="stylesheet" href="styles/style.css?v=5" />
+  <link rel="stylesheet" href="styles/shared-styles.css?v=5" />
+  <link rel="stylesheet" href="styles/animations.css?v=5" />
+  <link rel="stylesheet" href="styles/grid-fix.css?v=5" />
+  <style>
+    .category-section {
+      margin: 3rem 0;
+      padding: 2rem 0;
+      border-top: 2px solid #e6e9ef;
+    }
+    
+    .category-section:first-of-type {
+      border-top: none;
+    }
+    
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .category-header .icon {
+      font-size: 3rem;
+    }
+    
+    .category-header h2 {
+      margin: 0;
+      font-size: 2rem;
+      color: var(--text-primary);
+    }
+    
+    .category-subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      margin: -1.5rem 0 2rem 0;
+    }
+  </style>
 </head>
 <body>
   <header class="site-header site-header--home header-search">
@@ -41,50 +76,44 @@
         <div class="category-menu-item">
           <button class="category-toggle">Herramientas ⬇</button>
           <div class="subcategories-list">
-            <a href="products.html?cat=Herramientas&subcat=Manuales" onclick="filterByCategory('Herramientas', 'Manuales')">Herramientas Manuales</a>
+            <a href="#herramientas-manuales" onclick="closeModalAndScroll('herramientas-manuales'); return false;">Herramientas Manuales</a>
+            <a href="#herramientas-electricas" onclick="closeModalAndScroll('herramientas-electricas'); return false;">Herramientas Eléctricas</a>
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Maquinaria ⬇</button>
+          <button class="category-toggle">Tecnología ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Maquinaria', 'Herramientas Eléctricas'); return false;">Herramientas Eléctricas</a>
-            <a href="#" onclick="filterByCategory('Maquinaria', 'Soldadura'); return false;">Soldadura</a>
+            <a href="#tecnologia" onclick="closeModalAndScroll('tecnologia'); return false;">Tecnología y Domótica</a>
+          </div>
+        </div>
+        <div class="category-menu-item">
+          <button class="category-toggle">Baños ⬇</button>
+          <div class="subcategories-list">
+            <a href="#banos" onclick="closeModalAndScroll('banos'); return false;">Baños y Accesorios</a>
           </div>
         </div>
         <div class="category-menu-item">
           <button class="category-toggle">Pintura ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Pintura', 'Aplicadores'); return false;">Aplicadores</a>
-            <a href="#" onclick="filterByCategory('Pintura', 'Acabados'); return false;">Acabados</a>
-            <a href="#" onclick="filterByCategory('Pintura', 'Accesorios'); return false;">Accesorios</a>
+            <a href="#pintura" onclick="closeModalAndScroll('pintura'); return false;">Pintura y Acabados</a>
           </div>
         </div>
         <div class="category-menu-item">
           <button class="category-toggle">Materiales ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Materiales', 'Fasteners'); return false;">Fasteners</a>
-            <a href="#" onclick="filterByCategory('Materiales', 'Hardware'); return false;">Hardware</a>
+            <a href="#materiales" onclick="closeModalAndScroll('materiales'); return false;">Materiales de Construcción</a>
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Hogar ⬇</button>
+          <button class="category-toggle">Iluminación ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Hogar', 'Decoración'); return false;">Decoración</a>
-            <a href="#" onclick="filterByCategory('Hogar', 'Muebles'); return false;">Muebles</a>
-            <a href="#" onclick="filterByCategory('Hogar', 'Seguridad'); return false;">Seguridad</a>
-            <a href="#" onclick="filterByCategory('Hogar', 'Puertas'); return false;">Puertas</a>
+            <a href="#iluminacion" onclick="closeModalAndScroll('iluminacion'); return false;">Iluminación</a>
           </div>
         </div>
         <div class="category-menu-item">
           <button class="category-toggle">Seguridad ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Seguridad', 'Protección'); return false;">Protección Personal</a>
-          </div>
-        </div>
-        <div class="category-menu-item">
-          <button class="category-toggle">Medición ⬇</button>
-          <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Medición', 'Medidores'); return false;">Medidores</a>
+            <a href="#seguridad" onclick="closeModalAndScroll('seguridad'); return false;">Seguridad Industrial</a>
           </div>
         </div>
       </div>
@@ -95,23 +124,135 @@
     <section class="products-hero">
       <h2>Productos</h2>
       <div class="filter-row" style="display:flex;gap:0.75rem;align-items:center;margin-top:0.6rem;flex-wrap:wrap">
-        <select id="filter-category" style="padding:0.5rem;border-radius:6px;border:1px solid #e6e9ef">
+        <input id="global-search" type="search" placeholder="Buscar en todos los productos..." style="flex:1; min-width:250px;">
+        <select id="filter-category">
           <option value="">Todas las categorías</option>
         </select>
-        <select id="filter-brand" style="padding:0.5rem;border-radius:6px;border:1px solid #e6e9ef">
+        <select id="filter-brand">
           <option value="">Todas las marcas</option>
         </select>
-        <label style="display:flex;align-items:center;gap:0.4rem"><input type="checkbox" id="filter-instock" /> Sólo en stock</label>
+        <label style="display:flex;align-items:center;gap:0.4rem">
+          <input type="checkbox" id="filter-instock" /> Sólo en stock
+        </label>
         <button id="clear-filters" class="btn small">Limpiar filtros</button>
       </div>
     </section>
 
-    <section id="product-list" class="product-grid" aria-live="polite">
-      <!-- Products render here -->
+    <!-- SECCIÓN: TECNOLOGÍA Y DOMÓTICA -->
+    <section class="category-section" id="tecnologia">
+      <div class="category-header">
+        <span class="icon">📺</span>
+        <div>
+          <h2>Tecnología y Domótica</h2>
+        </div>
+      </div>
+      <p class="category-subtitle">Innovación y entretenimiento que se adaptan a tu estilo</p>
+      <div id="tecnologia-grid" class="product-grid">
+        <!-- Los productos se cargarán aquí con JavaScript -->
+      </div>
     </section>
+
+    <!-- SECCIÓN: BAÑOS Y ACCESORIOS -->
+    <section class="category-section" id="banos">
+      <div class="category-header">
+        <span class="icon">🚿</span>
+        <div>
+          <h2>Baños y Accesorios</h2>
+        </div>
+      </div>
+      <p class="category-subtitle">Calidad y diseño para tu baño perfecto</p>
+      <div id="banos-grid" class="product-grid">
+        <!-- Los productos se cargarán aquí con JavaScript -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN: HERRAMIENTAS MANUALES -->
+    <section class="category-section" id="herramientas-manuales">
+      <div class="category-header">
+        <span class="icon">🔧</span>
+        <div>
+          <h2>Herramientas Manuales</h2>
+        </div>
+      </div>
+      <p class="category-subtitle">Las mejores herramientas para tus proyectos</p>
+      <div id="herramientas-manuales-grid" class="product-grid">
+        <!-- Los productos se cargarán aquí con JavaScript -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN: HERRAMIENTAS ELÉCTRICAS -->
+    <section class="category-section" id="herramientas-electricas">
+      <div class="category-header">
+        <span class="icon">⚡</span>
+        <div>
+          <h2>Herramientas Eléctricas</h2>
+        </div>
+      </div>
+      <p class="category-subtitle">Potencia y precisión en cada trabajo</p>
+      <div id="herramientas-electricas-grid" class="product-grid">
+        <!-- Los productos se cargarán aquí con JavaScript -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN: PINTURA Y ACABADOS -->
+    <section class="category-section" id="pintura">
+      <div class="category-header">
+        <span class="icon">🎨</span>
+        <div>
+          <h2>Pintura y Acabados</h2>
+        </div>
+      </div>
+      <p class="category-subtitle">Dale color y vida a tus espacios</p>
+      <div id="pintura-grid" class="product-grid">
+        <!-- Los productos se cargarán aquí con JavaScript -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN: MATERIALES -->
+    <section class="category-section" id="materiales">
+      <div class="category-header">
+        <span class="icon">🔩</span>
+        <div>
+          <h2>Materiales de Construcción</h2>
+        </div>
+      </div>
+      <p class="category-subtitle">Todo lo que necesitas para construir</p>
+      <div id="materiales-grid" class="product-grid">
+        <!-- Los productos se cargarán aquí con JavaScript -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN: SEGURIDAD -->
+    <section class="category-section" id="seguridad">
+      <div class="category-header">
+        <span class="icon">🦺</span>
+        <div>
+          <h2>Seguridad Industrial</h2>
+        </div>
+      </div>
+      <p class="category-subtitle">Protección y seguridad en el trabajo</p>
+      <div id="seguridad-grid" class="product-grid">
+        <!-- Los productos se cargarán aquí con JavaScript -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN: ILUMINACIÓN -->
+    <section class="category-section" id="iluminacion">
+      <div class="category-header">
+        <span class="icon">💡</span>
+        <div>
+          <h2>Iluminación</h2>
+        </div>
+      </div>
+      <p class="category-subtitle">Ilumina tu hogar con estilo</p>
+      <div id="iluminacion-grid" class="product-grid">
+        <!-- Los productos se cargarán aquí con JavaScript -->
+      </div>
+    </section>
+
   </main>
 
-  <a class="whatsapp-fab" href="https://wa.me/0985569688" target="_blank" rel="noopener">WhatsApp</a>
+  <a class="whatsapp-fab" href="https://wa.me/1234567890" target="_blank" rel="noopener">WhatsApp</a>
 
   <script>
     // Menu desplegable de categorías
@@ -139,7 +280,6 @@
     categoryToggles.forEach(toggle => {
       toggle.addEventListener('click', () => {
         const subcategories = toggle.nextElementSibling;
-        const isActive = subcategories.classList.contains('active');
         
         // Close all other subcategories
         document.querySelectorAll('.subcategories-list.active').forEach(sub => {
@@ -155,12 +295,13 @@
       });
     });
 
-    // Función para filtrar por categoría
-    function filterByCategory(category, subcategory) {
-      const input = document.getElementById('search');
-      input.value = subcategory || category;
-      input.dispatchEvent(new Event('input'));
+    // Función para cerrar modal y hacer scroll
+    function closeModalAndScroll(sectionId) {
       modal.classList.remove('active');
+      const section = document.getElementById(sectionId);
+      if(section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   </script>
 

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', ()=>{
-  // small app utilities
+  // Small app utilities
   const clearBtn = document.getElementById('clear-search');
   if(clearBtn){
     clearBtn.addEventListener('click', ()=>{
@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       if(input){ input.value=''; input.dispatchEvent(new Event('input')) }
     })
   }
+  
   // Brand filter functionality
   const brandItems = document.querySelectorAll('.brand-item[data-brand]');
   brandItems.forEach(item => {
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
     
     item.addEventListener('mouseover', (e) => {
-      item.style.transform = 'scale(1.1)';
+      item.style.transform = 'scale(1.05)';
     });
     
     item.addEventListener('mouseout', (e) => {
@@ -28,9 +29,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 });
 
-// Filter by category - stores category in sessionStorage for products page
-function filterByCategory(category){
-  sessionStorage.setItem('filterCategory', category);
+// Filter by category - stores category and subcategory in sessionStorage for products page
+function filterByCategory(category, subcategory){
+  if(subcategory){
+    sessionStorage.setItem('filterSubcategory', subcategory);
+  } else {
+    sessionStorage.setItem('filterCategory', category);
+  }
+  window.location.href = 'products.html';
 }
 
 // Expose a small util for opening WhatsApp in a new window (can be used by modules)
