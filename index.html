@@ -34,10 +34,55 @@
   </header>
 
   <script>
-    // Header search
     (function(){
       const input = document.getElementById('header-search');
       const btn = document.getElementById('header-search-btn');
+      
+      // Función para filtrar por categoría
+      window.filterByCategory = function(category) {
+        // Limpiar filtros anteriores
+        sessionStorage.removeItem('globalSearch');
+        sessionStorage.removeItem('filterBrand');
+        
+        // Guardar la categoría seleccionada
+        sessionStorage.setItem('filterCategory', category);
+        
+        // Redirigir a products.html
+        window.location.href = 'products.html';
+      };
+
+      // Función para mostrar detalles del producto en modal
+      window.showProductDetail = function(product) {
+        const modal = document.createElement('div');
+        modal.className = 'product-detail-modal';
+        modal.innerHTML = `
+          <div class="product-detail-content">
+            <button class="close-detail" onclick="this.closest('.product-detail-modal').remove()">✕</button>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start;">
+              <div>
+                <img src="${product.image}" alt="${product.name}" style="width:100%; border-radius:8px;" />
+              </div>
+              <div>
+                <p style="color:#6b7280; font-size:0.85rem; margin:0 0 0.5rem 0; font-weight:600; text-transform:uppercase;">${product.brand}</p>
+                <h2 style="margin:0 0 1rem 0;">${product.name}</h2>
+                <p style="color:#6b7280; font-size:0.9rem; margin-bottom:1rem;">${product.description || 'Producto de calidad premium.'}</p>
+                <div style="background:#f3f4f6; padding:1rem; border-radius:8px; margin-bottom:1.5rem;">
+                  <p style="margin:0.5rem 0;"><strong>SKU:</strong> ${product.sku}</p>
+                  <p style="margin:0.5rem 0;"><strong>Estado:</strong> <span class="badge ${product.inStock ? 'in' : 'out'}" style="margin-left:0.5rem;">${product.inStock ? '✓ En Stock' : '✗ Agotado'}</span></p>
+                </div>
+                <button class="btn" style="width:100%; padding:0.75rem; cursor:pointer;" onclick="window.open('https://wa.me/593985569688?text=Hola%20quiero%20consultar%20sobre%20el%20producto:%20${encodeURIComponent(product.name)}%20(SKU:%20${product.sku})', '_blank'); this.closest('.product-detail-modal').remove();">
+                  CONSULTAR VÍA WHATSAPP
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        modal.addEventListener('click', (e) => {
+          if(e.target === modal) modal.remove();
+        });
+        document.body.appendChild(modal);
+      };
+      
       function doSearch(){
         const q = (input && input.value || '').trim();
         if(!q) return;
@@ -49,59 +94,61 @@
     })();
   </script>
 
-  <!-- Menú desplegable de categorías -->
   <div class="categories-modal" id="categories-modal">
     <div class="categories-modal-content">
       <button class="close-modal" id="close-modal">✕</button>
       <h2>Categorías</h2>
       <div class="categories-list">
         <div class="category-menu-item">
+          <button class="category-toggle">Hogar ⬇</button>
+          <div class="subcategories-list">
+            <a href="#" onclick="filterByCategory('Hogar'); return false;">Hogar y Confort</a>
+          </div>
+        </div>
+        <div class="category-menu-item">
           <button class="category-toggle">Herramientas ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Herramientas', 'Manuales'); return false;">Herramientas Manuales</a>
-            <a href="#" onclick="filterByCategory('Herramientas', 'Eléctricas'); return false;">Herramientas Eléctricas</a>
+            <a href="#" onclick="filterByCategory('Herramientas Manuales'); return false;">Herramientas Manuales</a>
+            <a href="#" onclick="filterByCategory('Herramientas Eléctricas'); return false;">Herramientas Eléctricas</a>
           </div>
         </div>
         <div class="category-menu-item">
           <button class="category-toggle">Tecnología ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Tecnología', 'Seguridad'); return false;">Cámaras y Seguridad</a>
-            <a href="#" onclick="filterByCategory('Tecnología', 'Domótica'); return false;">Domótica</a>
+            <a href="#" onclick="filterByCategory('Tecnología'); return false;">Tecnología y Domótica</a>
           </div>
         </div>
         <div class="category-menu-item">
           <button class="category-toggle">Baños ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Baños', 'Grifería'); return false;">Grifería</a>
-            <a href="#" onclick="filterByCategory('Baños', 'Accesorios'); return false;">Accesorios</a>
+            <a href="#" onclick="filterByCategory('Baños'); return false;">Baños y Accesorios</a>
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Pintura ⬇</button>
+          <button class="category-toggle">Construcción ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Pintura', 'Aplicadores'); return false;">Aplicadores</a>
-            <a href="#" onclick="filterByCategory('Pintura', 'Acabados'); return false;">Acabados</a>
+            <a href="#" onclick="filterByCategory('Pintura'); return false;">Pintura y Acabados</a>
+            <a href="#" onclick="filterByCategory('Materiales'); return false;">Materiales</a>
+            <a href="#" onclick="filterByCategory('Pisos'); return false;">Pisos</a>
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Materiales ⬇</button>
+          <button class="category-toggle">Instalaciones ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Materiales', 'Fasteners'); return false;">Fasteners</a>
-            <a href="#" onclick="filterByCategory('Materiales', 'Hardware'); return false;">Hardware</a>
+            <a href="#" onclick="filterByCategory('Plomería'); return false;">Plomería</a>
+            <a href="#" onclick="filterByCategory('Eléctrico'); return false;">Eléctrico</a>
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Iluminación ⬇</button>
+          <button class="category-toggle">Tienda ⬇</button>
           <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Iluminación', 'LED'); return false;">LED</a>
-            <a href="#" onclick="filterByCategory('Iluminación', 'Decorativa'); return false;">Decorativa</a>
-          </div>
-        </div>
-        <div class="category-menu-item">
-          <button class="category-toggle">Plomería ⬇</button>
-          <div class="subcategories-list">
-            <a href="#" onclick="filterByCategory('Plomería', 'Tuberías'); return false;">Tuberías</a>
-            <a href="#" onclick="filterByCategory('Plomería', 'Válvulas'); return false;">Válvulas</a>
+            <a href="#" onclick="filterByCategory('Mascotas'); return false;">Mascotas</a>
+            <a href="#" onclick="filterByCategory('Ferretería'); return false;">Ferretería</a>
+            <a href="#" onclick="filterByCategory('Automotriz'); return false;">Automotriz</a>
+            <a href="#" onclick="filterByCategory('Jardín'); return false;">Jardín</a>
+            <a href="#" onclick="filterByCategory('Limpieza'); return false;">Limpieza</a>
+            <a href="#" onclick="filterByCategory('Iluminación'); return false;">Iluminación</a>
+            <a href="#" onclick="filterByCategory('Seguridad'); return false;">Seguridad Industrial</a>
           </div>
         </div>
       </div>
@@ -116,7 +163,6 @@
       <a class="btn" href="products.html">Ver Todos los Productos</a>
     </section>
 
-    <!-- TODAS LAS CATEGORÍAS -->
     <section class="categories-section">
       <div class="container">
         <h2>Explora nuestras categorías</h2>
@@ -136,9 +182,9 @@
                 <span class="icon">🐕</span>
                 <p>Mascotas</p>
               </a>
-              <a href="#" class="category-card" onclick="filterByCategory('Herramientas'); return false;">
+              <a href="#" class="category-card" onclick="filterByCategory('Herramientas Manuales'); return false;">
                 <span class="icon">🔧</span>
-                <p>Herramientas Eléctricas</p>
+                <p>Herramientas Manuales</p>
               </a>
               <a href="#" class="category-card" onclick="filterByCategory('Ferretería'); return false;">
                 <span class="icon">🔩</span>
@@ -154,7 +200,7 @@
               </a>
               <a href="#" class="category-card" onclick="filterByCategory('Materiales'); return false;">
                 <span class="icon">🧱</span>
-                <p>Material Eléctrico</p>
+                <p>Materiales</p>
               </a>
               <a href="#" class="category-card" onclick="filterByCategory('Baños'); return false;">
                 <span class="icon">🚿</span>
@@ -164,13 +210,9 @@
                 <span class="icon">💡</span>
                 <p>Iluminación</p>
               </a>
-              <a href="#" class="category-card" onclick="filterByCategory('Muebles'); return false;">
-                <span class="icon">🪑</span>
-                <p>Muebles</p>
-              </a>
               <a href="#" class="category-card" onclick="filterByCategory('Pintura'); return false;">
                 <span class="icon">🎨</span>
-                <p>Pinturas</p>
+                <p>Pintura</p>
               </a>
               <a href="#" class="category-card" onclick="filterByCategory('Plomería'); return false;">
                 <span class="icon">🔧</span>
@@ -184,33 +226,13 @@
                 <span class="icon">🧹</span>
                 <p>Limpieza</p>
               </a>
-              <a href="#" class="category-card" onclick="filterByCategory('Tecnología'); return false;">
-                <span class="icon">📺</span>
-                <p>Tecnología y Domótica</p>
-              </a>
-              <a href="#" class="category-card" onclick="filterByCategory('Máquinas'); return false;">
-                <span class="icon">⚙️</span>
-                <p>Máquinas</p>
-              </a>
-              <a href="#" class="category-card" onclick="filterByCategory('Deportes'); return false;">
-                <span class="icon">⛺</span>
-                <p>Deportes</p>
-              </a>
-              <a href="#" class="category-card" onclick="filterByCategory('Señalética'); return false;">
-                <span class="icon">⚠️</span>
-                <p>Señalética</p>
+              <a href="#" class="category-card" onclick="filterByCategory('Herramientas Eléctricas'); return false;">
+                <span class="icon">⚡</span>
+                <p>Herramientas Eléctricas</p>
               </a>
               <a href="#" class="category-card" onclick="filterByCategory('Seguridad'); return false;">
                 <span class="icon">🦺</span>
-                <p>Seguridad Industrial</p>
-              </a>
-              <a href="#" class="category-card" onclick="filterByCategory('Cocina'); return false;">
-                <span class="icon">🍳</span>
-                <p>Decoración de Cocina</p>
-              </a>
-              <a href="#" class="category-card" onclick="filterByCategory('Puertas'); return false;">
-                <span class="icon">🚪</span>
-                <p>Puertas y Ventanas</p>
+                <p>Seguridad</p>
               </a>
             </div>
           </div>
@@ -219,96 +241,69 @@
       </div>
     </section>
 
-    <!-- PRODUCTOS DESTACADOS - TECNOLOGÍA -->
-    <section class="featured-products">
+    <!-- PRODUCTOS DESTACADOS - BAÑOS (SIN PRECIOS) -->
+    <section class="featured-products featured-products--alt">
       <div class="container">
         <h2 class="section-title">
-          <span class="icon">📺</span> Tecnología y domótica para tu hogar
+          <span class="icon">🚿</span> Baños y Accesorios que elevan tu espacio
         </h2>
-        <p class="section-subtitle">Innovación y entretenimiento que se adaptan a tu estilo</p>
+        <p class="section-subtitle">Calidad y diseño para tu baño perfecto</p>
         
         <div class="products-carousel-wrapper">
-          <button class="carousel-btn prev" onclick="scrollCarousel('tech', -1)">❮</button>
-          <div class="products-carousel" id="tech-carousel">
+          <button class="carousel-btn prev" onclick="scrollCarousel('bath', -1)">❮</button>
+          <div class="products-carousel" id="bath-carousel">
             <div class="products-track">
-              <!-- Producto 1 -->
-              <div class="featured-product-card">
-                <span class="discount-badge">-37%</span>
-                <img src="https://picsum.photos/seed/tech1/300/300" alt="Enchufe Smart">
-                <div class="product-info">
-                  <p class="brand">NEXXT</p>
-                  <h3>Enchufe Smart dual con conexión WiFi para exteriores</h3>
-                  <p class="sku">SKU: 458979</p>
-                  <p class="price">$23,00 <span class="old-price">$36,42</span></p>
-                  <p class="installments">Incluye IVA<br>1 cuotas de $23,00 sin interés</p>
-                  <button class="btn-add">AGREGAR</button>
+              <div class="featured-product-card-simple" onclick="showProductDetail({id:101, name:'Grifería monocomando lavamanos cromada', brand:'FV', sku:'789456', inStock:true, image:'https://picsum.photos/seed/bath1/300/300', description:'Grifería monocomando cromada elegante para lavamanos.'})" style="cursor:pointer;">
+                <img src="https://picsum.photos/seed/bath1/300/300" alt="Grifería">
+                <div class="product-info-simple">
+                  <p class="brand">FV</p>
+                  <h3>Grifería monocomando para lavamanos cromada</h3>
+                  <p class="sku">SKU: 789456</p>
+                  <span class="badge in">✓ En Stock</span>
+                  <button class="btn-consult" onclick="event.stopPropagation(); window.open('https://wa.me/593985569688?text=Hola%20quiero%20consultar%20sobre:%20Grifería%20monocomando%20(SKU:%20789456)', '_blank');">CONSULTAR</button>
                 </div>
               </div>
               
-              <!-- Producto 2 -->
-              <div class="featured-product-card">
-                <span class="discount-badge">-17%</span>
-                <img src="https://picsum.photos/seed/tech2/300/300" alt="Cámara WiFi">
-                <div class="product-info">
-                  <p class="brand">NEXXT</p>
-                  <h3>Cámara WiFi exterior/sensor de movimiento 350°</h3>
-                  <p class="sku">SKU: 560864</p>
-                  <p class="price">$49,95 <span class="old-price">$59,99</span></p>
-                  <p class="installments">Incluye IVA<br>3 cuotas de $16,65 sin interés</p>
-                  <button class="btn-add">AGREGAR</button>
+              <div class="featured-product-card-simple" onclick="showProductDetail({id:102, name:'Ducha eléctrica 5500W control temperatura', brand:'EDESA', sku:'123789', inStock:true, image:'https://picsum.photos/seed/bath2/300/300', description:'Ducha eléctrica 5500W con control de temperatura ajustable.'})" style="cursor:pointer;">
+                <img src="https://picsum.photos/seed/bath2/300/300" alt="Ducha">
+                <div class="product-info-simple">
+                  <p class="brand">EDESA</p>
+                  <h3>Ducha eléctrica 5500W con control de temperatura</h3>
+                  <p class="sku">SKU: 123789</p>
+                  <span class="badge in">✓ En Stock</span>
+                  <button class="btn-consult" onclick="event.stopPropagation(); window.open('https://wa.me/593985569688?text=Hola%20quiero%20consultar%20sobre:%20Ducha%20eléctrica%205500W%20(SKU:%20123789)', '_blank');">CONSULTAR</button>
                 </div>
               </div>
               
-              <!-- Producto 3 -->
-              <div class="featured-product-card">
-                <span class="discount-badge">-27%</span>
-                <img src="https://picsum.photos/seed/tech3/300/300" alt="Televisor">
-                <div class="product-info">
-                  <p class="brand">INDURAMA</p>
-                  <h3>Televisor ON THE GO HD de 32" con ANDROID TV 11</h3>
-                  <p class="sku">SKU: 450645</p>
-                  <p class="price">$505,31 <span class="old-price">$689,00</span></p>
-                  <p class="installments">Incluye IVA<br>12 cuotas de $42,10 sin interés</p>
-                  <button class="btn-add">AGREGAR</button>
+              <div class="featured-product-card-simple" onclick="showProductDetail({id:103, name:'Inodoro One Piece descarga dual ahorro agua', brand:'EDESA', sku:'456123', inStock:true, image:'https://picsum.photos/seed/bath3/300/300', description:'Inodoro con descarga dual para ahorrar agua.'})" style="cursor:pointer;">
+                <img src="https://picsum.photos/seed/bath3/300/300" alt="Inodoro">
+                <div class="product-info-simple">
+                  <p class="brand">EDESA</p>
+                  <h3>Inodoro One Piece con descarga dual ahorro agua</h3>
+                  <p class="sku">SKU: 456123</p>
+                  <span class="badge in">✓ En Stock</span>
+                  <button class="btn-consult" onclick="event.stopPropagation(); window.open('https://wa.me/593985569688?text=Hola%20quiero%20consultar%20sobre:%20Inodoro%20One%20Piece%20(SKU:%20456123)', '_blank');">CONSULTAR</button>
                 </div>
               </div>
               
-              <!-- Producto 4 -->
-              <div class="featured-product-card">
-                <span class="discount-badge">-12%</span>
-                <img src="https://picsum.photos/seed/tech4/300/300" alt="Cámara Seguridad">
-                <div class="product-info">
-                  <p class="brand">STEREN</p>
-                  <h3>Cámara de seguridad WiFi con detector de movimiento</h3>
-                  <p class="sku">SKU: 560801</p>
-                  <p class="price">$34,99 <span class="old-price">$39,95</span></p>
-                  <p class="installments">Incluye IVA<br>3 cuotas de $11,66 sin interés</p>
-                  <button class="btn-add">AGREGAR</button>
-                </div>
-              </div>
-              
-              <!-- Producto 5 -->
-              <div class="featured-product-card">
-                <span class="discount-badge">-11%</span>
-                <img src="https://picsum.photos/seed/tech5/300/300" alt="KIT Cámara Smart">
-                <div class="product-info">
-                  <p class="brand">NEXXT</p>
-                  <h3>KIT cámara Smart inalámbrica para interiores y exteriores</h3>
-                  <p class="sku">SKU: 560883</p>
-                  <p class="price">$79,99 <span class="old-price">$89,95</span></p>
-                  <p class="installments">Incluye IVA<br>6 cuotas de $13,33 sin interés</p>
-                  <button class="btn-add">AGREGAR</button>
+              <div class="featured-product-card-simple" onclick="showProductDetail({id:104, name:'Lavamanos con pedestal cerámico blanco', brand:'EDESA', sku:'654987', inStock:false, image:'https://picsum.photos/seed/bath4/300/300', description:'Lavamanos cerámico blanco con pedestal.'})" style="cursor:pointer;">
+                <img src="https://picsum.photos/seed/bath4/300/300" alt="Lavamanos">
+                <div class="product-info-simple">
+                  <p class="brand">EDESA</p>
+                  <h3>Lavamanos con pedestal cerámico blanco</h3>
+                  <p class="sku">SKU: 654987</p>
+                  <span class="badge out">✗ Agotado</span>
+                  <button class="btn-consult" onclick="event.stopPropagation(); window.open('https://wa.me/593985569688?text=Hola%20quiero%20consultar%20sobre:%20Lavamanos%20con%20pedestal%20(SKU:%20654987)', '_blank');">CONSULTAR</button>
                 </div>
               </div>
             </div>
           </div>
-          <button class="carousel-btn next" onclick="scrollCarousel('tech', 1)">❯</button>
+          <button class="carousel-btn next" onclick="scrollCarousel('bath', 1)">❯</button>
         </div>
-        <a href="products.html?cat=Tecnología" class="btn-view-more">VER MÁS</a>
+        <a href="products.html#banos" class="btn-view-more">VER MÁS</a>
       </div>
     </section>
 
-    <!-- Features -->
     <section class="container features">
       <div class="feature-card">
         <h3>🔍 Búsqueda Rápida</h3>
@@ -324,7 +319,6 @@
       </div>
     </section>
 
-    <!-- Marcas -->
     <section class="brands-section">
       <div class="container">
         <h2>Marcas con las que trabajamos</h2>
@@ -332,51 +326,13 @@
           <button class="carousel-btn prev" onclick="scrollCarousel('brands', -1)">❮</button>
           <div class="brands-carousel" id="brands-carousel">
           <div class="carousel-track">
-            <div class="brand-item" data-brand="Stanley" role="button" tabindex="0">
-              <img src="images/Stanley.png" alt="Stanley" title="Stanley" />
-            </div>
-            <div class="brand-item" data-brand="DeWalt" role="button" tabindex="0">
-              <img src="images/DeWalt.png" alt="DeWalt" title="DeWalt" />
-            </div>
-            <div class="brand-item" data-brand="Irwin" role="button" tabindex="0">
-              <img src="images/irwin.png" alt="Irwin" title="Irwin" />
-            </div>
-            <div class="brand-item" data-brand="3M" role="button" tabindex="0">
-              <img src="images/Logo-3M.png" alt="3M" title="3M" />
-            </div>
-            <div class="brand-item" data-brand="Truper" role="button" tabindex="0">
-              <img src="images/truper.png" alt="Truper" title="Truper" />
-            </div>
-            <div class="brand-item" data-brand="Tigre" role="button" tabindex="0">
-              <img src="images/tigre.png" alt="Tigre" title="Tigre" />
-            </div>
-            <div class="brand-item" data-brand="Norton" role="button" tabindex="0">
-              <img src="images/norton.png" alt="Norton" title="Norton" />
-            </div>
-            <div class="brand-item" data-brand="Plastigama" role="button" tabindex="0">
-              <img src="images/Plastigama.jpg" alt="Plastigama" title="Plastigama" />
-            </div>
-            <div class="brand-item" data-brand="VETO" role="button" tabindex="0">
-              <img src="images/VETO.png" alt="VETO" title="VETO" />
-            </div>
-            <div class="brand-item" data-brand="Volteck" role="button" tabindex="0">
-              <img src="images/volteck.png" alt="Volteck" title="Volteck" />
-            </div>
-            <div class="brand-item" data-brand="Ingco" role="button" tabindex="0">
-              <img src="images/Ingco.png" alt="Ingco" title="Ingco" />
-            </div>
-            <div class="brand-item" data-brand="Edesa" role="button" tabindex="0">
-              <img src="images/edesa.jpg" alt="Edesa" title="Edesa" />
-            </div>
-            <div class="brand-item" data-brand="FV" role="button" tabindex="0">
-              <img src="images/fv.png" alt="FV" title="FV" />
-            </div>
-            <div class="brand-item" data-brand="Sika" role="button" tabindex="0">
-              <img src="images/sika.png" alt="Sika" title="Sika" />
-            </div>
-            <div class="brand-item" data-brand="Adelca" role="button" tabindex="0">
-              <img src="images/Adelca.png" alt="Adelca" title="Adelca" />
-            </div>
+            <div class="brand-item" data-brand="Stanley"><img src="images/Stanley.png" alt="Stanley" /></div>
+            <div class="brand-item" data-brand="DeWalt"><img src="images/DeWalt.png" alt="DeWalt" /></div>
+            <div class="brand-item" data-brand="3M"><img src="images/Logo-3M.png" alt="3M" /></div>
+            <div class="brand-item" data-brand="Truper"><img src="images/truper.png" alt="Truper" /></div>
+            <div class="brand-item" data-brand="Edesa"><img src="images/edesa.jpg" alt="Edesa" /></div>
+            <div class="brand-item" data-brand="FV"><img src="images/fv.png" alt="FV" /></div>
+            <div class="brand-item" data-brand="Sika"><img src="images/sika.png" alt="Sika" /></div>
           </div>
         </div>
          <button class="carousel-btn next" onclick="scrollCarousel('brands', 1)">❯</button>
@@ -384,7 +340,6 @@
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer-content">
       <div class="footer-column footer-brand-centered">
@@ -398,44 +353,31 @@
   <a href="#"><img src="RedesSociales/youtube.png" alt="YouTube"></a>
 </div>
       </div>
-
       <div class="footer-column">
         <h3 style="margin-top:0">Su Centro Ferretero</h3>
-        <p style="max-width:520px">Tu aliado estratégico para proyectos profesionales, domésticos, remodelaciones y equipamiento diario que tu hogar, pequeño negocio, emprendimiento o empresa requiere para transformar tu hogar o lugar de trabajo.</p>
+        <p style="max-width:520px">Tu aliado estratégico para proyectos profesionales, domésticos y empresariales.</p>
       </div>
-      
       <div class="footer-column">
         <h4>Información</h4>
         <ul>
           <li><a href="quien-somos.html">Quiénes Somos</a></li>
-          <li><a href="derechos-datos.html">Derechos sobre datos personales</a></li>
           <li><a href="politicas-privacidad.html">Políticas de Privacidad</a></li>
-          <li><a href="terminos-condiciones.html">Términos y Condiciones</a></li>
-          <li><a href="politica-cookies.html">Política de Cookies</a></li>
         </ul>
       </div>
-      
       <div class="footer-column">
         <h4>Ubicaciones</h4>
         <ul>
           <li><a href="branches.html">Nuestros Locales</a></li>
         </ul>
-      </div>  
-
+      </div>
       <div class="footer-column">
         <h4>Medios de pago</h4>
         <div class="payment-methods payment-methods--small">
           <img src="pagos/Visa.png" alt="Visa" />
           <img src="pagos/MasterCard.png" alt="MasterCard" />
         </div>
-        <p style="font-size:0.9rem;margin-top:1rem">Transferencias bancarias</p>
-        <div class="payment-methods payment-methods--small">
-        <img src="pagos/pichincha.jpg" alt="Banco Pichincha" />
-        <img src="pagos/guayaquil.jpg" alt="Banco Guayaquil" />
-        </div>
       </div>
     </div>
-    
     <div class="footer-bottom">
       <div class="container">
         <p>&copy; 2024 Su Centro Ferretero. Todos los derechos reservados.</p>
@@ -443,75 +385,84 @@
     </div>
   </footer>
 
-  <a class="whatsapp-fab" href="https://wa.me/1234567890" target="_blank" rel="noopener">WhatsApp</a>
+  <!-- CHATBOT IA -->
+  <div id="ai-chatbot" class="chatbot-container">
+    <button id="chatbot-toggle" class="chatbot-toggle">
+      <span class="icon">🤖</span>
+      <span class="text">Asistente IA</span>
+    </button>
+    
+    <div id="chatbot-window" class="chatbot-window">
+      <div class="chatbot-header">
+        <div>
+          <h3>🤖 Asistente Inteligente</h3>
+          <p>¿Qué producto buscas?</p>
+        </div>
+        <button id="chatbot-close" class="chatbot-close">✕</button>
+      </div>
+      
+      <div id="chatbot-messages" class="chatbot-messages">
+        <div class="message bot-message">
+          <p>¡Hola! 👋 Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?</p>
+          <div class="quick-options">
+            <button class="quick-btn" onclick="quickAsk('Busco herramientas para construcción')">🔨 Herramientas</button>
+            <button class="quick-btn" onclick="quickAsk('Necesito productos para baño')">🚿 Baños</button>
+            <button class="quick-btn" onclick="quickAsk('Busco tecnología para el hogar')">📺 Tecnología</button>
+            <button class="quick-btn" onclick="quickAsk('¿Dónde están ubicados?')">📍 Ubicación</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chatbot-input">
+        <input type="text" id="chatbot-input-field" placeholder="Escribe tu pregunta..." />
+        <button id="chatbot-send">Enviar</button>
+      </div>
+    </div>
+  </div>
 
+  <a class="whatsapp-fab" href="https://wa.me/593985569688" target="_blank" rel="noopener">WhatsApp</a>
+
+  <script src="scripts/chatbot.js"></script>
+  <script src="scripts/app.js"></script>
   <script>
-    // Función para hacer scroll en carruseles
     function scrollCarousel(carouselId, direction) {
       const carousel = document.getElementById(carouselId + '-carousel');
       const scrollAmount = 300;
-      if (direction === 1) {
-        carousel.scrollLeft += scrollAmount;
-      } else {
-        carousel.scrollLeft -= scrollAmount;
-      }
+      carousel.scrollLeft += direction * scrollAmount;
     }
 
-    // Menu desplegable de categorías
     const menuToggle = document.getElementById('menu-toggle');
     const closeModal = document.getElementById('close-modal');
     const modal = document.getElementById('categories-modal');
     const categoryToggles = document.querySelectorAll('.category-toggle');
 
-    if(menuToggle){
-      menuToggle.addEventListener('click', () => {
-        modal.classList.add('active');
-      });
-    }
-
-    if(closeModal){
-      closeModal.addEventListener('click', () => {
-        modal.classList.remove('active');
-      });
-    }
-
-    modal.addEventListener('click', (e) => {
-      if(e.target === modal) modal.classList.remove('active');
-    });
+    if(menuToggle) menuToggle.addEventListener('click', () => modal.classList.add('active'));
+    if(closeModal) closeModal.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
 
     categoryToggles.forEach(toggle => {
       toggle.addEventListener('click', () => {
         const subcategories = toggle.nextElementSibling;
-        
-        // Close all other subcategories
         document.querySelectorAll('.subcategories-list.active').forEach(sub => {
           if(sub !== subcategories){
             sub.classList.remove('active');
             sub.previousElementSibling.classList.remove('active');
           }
         });
-        
-        // Toggle current
         subcategories.classList.toggle('active');
         toggle.classList.toggle('active');
       });
     });
 
-    // Marca: al hacer click, guardar filtro y navegar a la página de productos
     document.querySelectorAll('.brand-item').forEach(item => {
       item.addEventListener('click', () => {
-        const brand = item.dataset.brand || item.getAttribute('data-brand');
+        const brand = item.dataset.brand;
         if(brand){
           sessionStorage.setItem('filterBrand', brand);
           window.location.href = 'products.html';
         }
       });
-      item.addEventListener('keypress', (e) => {
-        if(e.key === 'Enter' || e.key === ' ') item.click();
-      });
     });
   </script>
-
-  <script src="scripts/app.js"></script>
 </body>
 </html>

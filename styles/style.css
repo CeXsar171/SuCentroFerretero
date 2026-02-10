@@ -1319,3 +1319,452 @@ select:focus {
     display: none;
   }
 }
+
+/* ===================================
+   CHATBOT IA
+   =================================== */
+.chatbot-container {
+  position: fixed;
+  right: 20px;
+  bottom: 90px;
+  z-index: 98;
+}
+
+.chatbot-toggle {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.9rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 300ms ease;
+  font-size: 0.95rem;
+}
+
+.chatbot-toggle:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+}
+
+.chatbot-toggle.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chatbot-toggle .icon {
+  font-size: 1.3rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.chatbot-window {
+  position: fixed;
+  right: 20px;
+  bottom: 90px;
+  width: 380px;
+  height: 550px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 99;
+}
+
+.chatbot-window.active {
+  display: flex;
+  animation: slideUp 300ms ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chatbot-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.chatbot-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.chatbot-header p {
+  margin: 0.3rem 0 0 0;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.chatbot-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.3rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 200ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatbot-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.chatbot-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  background: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.chatbot-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatbot-messages::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 3px;
+}
+
+.message {
+  max-width: 80%;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  animation: fadeIn 300ms ease;
+}
+
+.user-message {
+  align-self: flex-end;
+  background: #667eea;
+  color: white;
+  margin-left: auto;
+}
+
+.bot-message {
+  align-self: flex-start;
+  background: white;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.message p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.9rem;
+  white-space: pre-line;
+}
+
+.message a {
+  color: #667eea;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.typing {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.quick-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.quick-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+  text-align: left;
+}
+
+.quick-btn:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.chatbot-input {
+  display: flex;
+  padding: 1rem;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  gap: 0.5rem;
+}
+
+.chatbot-input input {
+  flex: 1;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.7rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 200ms ease;
+}
+
+.chatbot-input input:focus {
+  border-color: #667eea;
+}
+
+.chatbot-input button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.chatbot-input button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Estilos para productos sin precios */
+.featured-product-card-simple {
+  flex: 0 0 280px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(12, 18, 30, 0.08);
+  overflow: hidden;
+  transition: all 300ms ease;
+}
+
+.featured-product-card-simple:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(12, 18, 30, 0.15);
+}
+
+.featured-product-card-simple img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.product-info-simple {
+  padding: 1rem;
+}
+
+.product-info-simple .brand {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+}
+
+.product-info-simple h3 {
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+  line-height: 1.4;
+  min-height: 2.8em;
+}
+
+.product-info-simple .sku {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin: 0 0 0.75rem 0;
+}
+
+.product-info-simple .badge {
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.btn-consult {
+  width: 100%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 300ms ease;
+  font-size: 0.9rem;
+}
+
+.btn-consult:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(11, 121, 208, 0.3);
+}
+
+/* Responsive para chatbot */
+@media (max-width: 600px) {
+  .chatbot-container {
+    right: 10px;
+    bottom: 80px;
+  }
+  
+  .chatbot-window {
+    right: 10px;
+    bottom: 80px;
+    width: calc(100vw - 20px);
+    height: 500px;
+  }
+  
+  .chatbot-toggle {
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .chatbot-toggle .text {
+    display: none;
+  }
+}
+
+/* Botón Ver más por sección */
+.view-more-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.btn-view-more-section {
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 300ms ease;
+  font-size: 0.95rem;
+}
+
+.btn-view-more-section:hover {
+  background: var(--accent);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(11, 121, 208, 0.3);
+}
+
+/* ===================================
+   MODAL DETALLE DE PRODUCTO
+   =================================== */
+.product-detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 300ms ease;
+}
+
+.product-detail-content {
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-2xl);
+  position: relative;
+  animation: slideUp 300ms ease;
+}
+
+.close-detail {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--muted);
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 200ms ease;
+}
+
+.close-detail:hover {
+  background: var(--border-lighter);
+  color: var(--accent);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .product-detail-content {
+    padding: 1.5rem;
+  }
+  
+  .product-detail-content > div {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+}

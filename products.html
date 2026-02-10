@@ -4,38 +4,29 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Su Centro Ferretero — Productos</title>
-  <link rel="stylesheet" href="styles/style.css?v=5" />
-  <link rel="stylesheet" href="styles/shared-styles.css?v=5" />
-  <link rel="stylesheet" href="styles/animations.css?v=5" />
-  <link rel="stylesheet" href="styles/grid-fix.css?v=5" />
+  <link rel="stylesheet" href="styles/style.css?v=6" />
+  <link rel="stylesheet" href="styles/shared-styles.css?v=6" />
+  <link rel="stylesheet" href="styles/animations.css?v=6" />
+  <link rel="stylesheet" href="styles/grid-fix.css?v=6" />
   <style>
     .category-section {
       margin: 3rem 0;
       padding: 2rem 0;
       border-top: 2px solid #e6e9ef;
     }
-    
-    .category-section:first-of-type {
-      border-top: none;
-    }
-    
+    .category-section:first-of-type { border-top: none; }
     .category-header {
       display: flex;
       align-items: center;
       gap: 1rem;
       margin-bottom: 2rem;
     }
-    
-    .category-header .icon {
-      font-size: 3rem;
-    }
-    
+    .category-header .icon { font-size: 3rem; }
     .category-header h2 {
       margin: 0;
       font-size: 2rem;
       color: var(--text-primary);
     }
-    
     .category-subtitle {
       color: var(--muted);
       font-size: 1rem;
@@ -47,32 +38,158 @@
   <header class="site-header site-header--home header-search">
     <div class="container nav-row">
       <div class="brand-controls">
-        <a class="logo" href="index.html" title="Inicio"><img src="images/CentroFerre.png" alt="Su Centro Ferretero" /></a>
-        <button class="menu-toggle hamburger-btn" id="menu-toggle" aria-label="Abrir categorías"><span class="hamburger" aria-hidden="true"></span></button>
+        <a class="logo" href="index.html"><img src="images/CentroFerre.png" alt="Su Centro Ferretero" /></a>
+        <button class="menu-toggle" id="menu-toggle"><span class="hamburger"></span></button>
       </div>
       <nav class="main-nav">
         <a href="index.html">Inicio</a>
         <a href="products.html">Productos</a>
         <a href="branches.html">Sucursales</a>
       </nav>
-
-      <div class="header-search" role="search">
-        <div class="search-box">
-          <button id="header-search-btn" class="search-btn search-icon" aria-label="Buscar">🔍</button>
-          <input id="search" type="search" placeholder="Busca tu producto" aria-label="Buscar" />
+      <div class="header-search">
+        <div class="search-box" style="position: relative;">
+          <button id="header-search-btn" class="search-btn">🔍</button>
+          <input id="header-search" type="search" placeholder="Busca tu producto" />
+          <div id="search-suggestions" class="search-suggestions" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #e6e9ef; border-radius:6px; max-height:300px; overflow-y:auto; z-index:1000; box-shadow:0 4px 6px rgba(0,0,0,0.1);"></div>
         </div>
       </div>
-
-      <div class="header-cta-wrap" aria-hidden="true"></div>
     </div>
   </header>
 
-  <!-- Menú desplegable de categorías -->
+  <script>
+    // Manejar búsqueda en el header de products.html
+    let productsReady = false;
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      productsReady = true;
+    });
+    
+    (function(){
+      const input = document.getElementById('header-search');
+      const btn = document.getElementById('header-search-btn');
+      const suggestionsDiv = document.getElementById('search-suggestions');
+      
+      function doSearch(){
+        if(!productsReady) return;
+        suggestionsDiv.style.display = 'none';
+        
+        const q = (input && input.value || '').trim();
+        if(!q) {
+          const sections = document.querySelectorAll('.category-section');
+          sections.forEach(section => {
+            section.style.display = '';
+            section.querySelectorAll('.product-card').forEach(card => {
+              card.style.display = '';
+            });
+          });
+          return;
+        }
+        
+        if(typeof filterProductsBySearch === 'function') {
+          filterProductsBySearch(q);
+        }
+      }
+      
+      function showSuggestions(){
+        if(!productsReady) return;
+        
+        const q = (input && input.value || '').trim();
+        if(!q) {
+          suggestionsDiv.style.display = 'none';
+          return;
+        }
+        
+        if(typeof getSuggestions === 'function') {
+          const suggestions = getSuggestions(q);
+          
+          if(suggestions.length === 0) {
+            suggestionsDiv.style.display = 'none';
+            return;
+          }
+          
+          suggestionsDiv.innerHTML = '';
+          
+          // Agrupar sugerencias por tipo
+          const grouped = { suggestions: [], categories: [] };
+          suggestions.forEach(s => {
+            if(s.type === 'suggestion') grouped.suggestions.push(s);
+            else if(s.type === 'category') grouped.categories.push(s);
+          });
+          
+          // Mostrar sugerencias directas
+          if(grouped.suggestions.length > 0) {
+            const header = document.createElement('div');
+            header.style.cssText = 'padding:0.75rem 1rem; font-weight:bold; color:#6b7280; font-size:0.85rem; border-bottom:1px solid #e6e9ef;';
+            header.textContent = 'SUGERENCIAS';
+            suggestionsDiv.appendChild(header);
+            
+            grouped.suggestions.forEach(s => {
+              const item = document.createElement('div');
+              item.style.cssText = 'padding:0.75rem 1rem; cursor:pointer; border-bottom:1px solid #f3f4f6; transition:background 0.2s;';
+              item.textContent = s.text;
+              item.onmouseover = () => item.style.background = '#f9fafb';
+              item.onmouseout = () => item.style.background = '';
+              item.onclick = () => {
+                input.value = s.text;
+                doSearch();
+              };
+              suggestionsDiv.appendChild(item);
+            });
+          }
+          
+          // Mostrar categorías
+          if(grouped.categories.length > 0) {
+            grouped.categories.forEach(cat => {
+              const catHeader = document.createElement('div');
+              catHeader.style.cssText = 'padding:0.75rem 1rem; font-weight:bold; color:#1f2937; font-size:0.85rem; background:#f9fafb; border-top:1px solid #e6e9ef;';
+              catHeader.textContent = cat.category;
+              suggestionsDiv.appendChild(catHeader);
+              
+              cat.items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.style.cssText = 'padding:0.75rem 1rem; cursor:pointer; border-bottom:1px solid #f3f4f6; transition:background 0.2s; padding-left:2rem;';
+                itemDiv.textContent = item;
+                itemDiv.onmouseover = () => itemDiv.style.background = '#f9fafb';
+                itemDiv.onmouseout = () => itemDiv.style.background = '';
+                itemDiv.onclick = () => {
+                  input.value = item;
+                  doSearch();
+                };
+                suggestionsDiv.appendChild(itemDiv);
+              });
+            });
+          }
+          
+          suggestionsDiv.style.display = 'block';
+        }
+      }
+      
+      if(btn) btn.addEventListener('click', doSearch);
+      if(input) {
+        input.addEventListener('keypress', (e)=>{ if(e.key === 'Enter') doSearch(); });
+        input.addEventListener('input', showSuggestions);
+      }
+      
+      // Cerrar sugerencias al hacer clic fuera
+      document.addEventListener('click', (e) => {
+        if(e.target !== input && e.target !== suggestionsDiv) {
+          suggestionsDiv.style.display = 'none';
+        }
+      });
+    })();
+  </script>
+
   <div class="categories-modal" id="categories-modal">
     <div class="categories-modal-content">
       <button class="close-modal" id="close-modal">✕</button>
       <h2>Categorías</h2>
       <div class="categories-list">
+        <div class="category-menu-item">
+          <button class="category-toggle">Hogar ⬇</button>
+          <div class="subcategories-list">
+            <a href="#hogar" onclick="closeModalAndScroll('hogar'); return false;">Hogar y Confort</a>
+          </div>
+        </div>
         <div class="category-menu-item">
           <button class="category-toggle">Herramientas ⬇</button>
           <div class="subcategories-list">
@@ -93,26 +210,29 @@
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Pintura ⬇</button>
+          <button class="category-toggle">Construcción ⬇</button>
           <div class="subcategories-list">
             <a href="#pintura" onclick="closeModalAndScroll('pintura'); return false;">Pintura y Acabados</a>
+            <a href="#materiales" onclick="closeModalAndScroll('materiales'); return false;">Materiales</a>
+            <a href="#pisos" onclick="closeModalAndScroll('pisos'); return false;">Pisos</a>
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Materiales ⬇</button>
+          <button class="category-toggle">Instalaciones ⬇</button>
           <div class="subcategories-list">
-            <a href="#materiales" onclick="closeModalAndScroll('materiales'); return false;">Materiales de Construcción</a>
+            <a href="#plomeria" onclick="closeModalAndScroll('plomeria'); return false;">Plomería</a>
+            <a href="#electrico" onclick="closeModalAndScroll('electrico'); return false;">Eléctrico</a>
           </div>
         </div>
         <div class="category-menu-item">
-          <button class="category-toggle">Iluminación ⬇</button>
+          <button class="category-toggle">Tienda ⬇</button>
           <div class="subcategories-list">
+            <a href="#mascotas" onclick="closeModalAndScroll('mascotas'); return false;">Mascotas</a>
+            <a href="#ferreteria" onclick="closeModalAndScroll('ferreteria'); return false;">Ferretería</a>
+            <a href="#automotriz" onclick="closeModalAndScroll('automotriz'); return false;">Automotriz</a>
+            <a href="#jardin" onclick="closeModalAndScroll('jardin'); return false;">Jardín</a>
+            <a href="#limpieza" onclick="closeModalAndScroll('limpieza'); return false;">Limpieza</a>
             <a href="#iluminacion" onclick="closeModalAndScroll('iluminacion'); return false;">Iluminación</a>
-          </div>
-        </div>
-        <div class="category-menu-item">
-          <button class="category-toggle">Seguridad ⬇</button>
-          <div class="subcategories-list">
             <a href="#seguridad" onclick="closeModalAndScroll('seguridad'); return false;">Seguridad Industrial</a>
           </div>
         </div>
@@ -121,191 +241,218 @@
   </div>
 
   <main class="container">
-    <section class="products-hero">
-      <h2>Productos</h2>
-      <div class="filter-row" style="display:flex;gap:0.75rem;align-items:center;margin-top:0.6rem;flex-wrap:wrap">
-        <input id="global-search" type="search" placeholder="Buscar en todos los productos..." style="flex:1; min-width:250px;">
-        <select id="filter-category">
-          <option value="">Todas las categorías</option>
-        </select>
-        <select id="filter-brand">
-          <option value="">Todas las marcas</option>
-        </select>
-        <label style="display:flex;align-items:center;gap:0.4rem">
-          <input type="checkbox" id="filter-instock" /> Sólo en stock
-        </label>
-        <button id="clear-filters" class="btn small">Limpiar filtros</button>
-      </div>
-    </section>
-
-    <!-- SECCIÓN: TECNOLOGÍA Y DOMÓTICA -->
     <section class="category-section" id="tecnologia">
       <div class="category-header">
         <span class="icon">📺</span>
-        <div>
-          <h2>Tecnología y Domótica</h2>
-        </div>
+        <h2>Tecnología y Domótica</h2>
       </div>
-      <p class="category-subtitle">Innovación y entretenimiento que se adaptan a tu estilo</p>
-      <div id="tecnologia-grid" class="product-grid">
-        <!-- Los productos se cargarán aquí con JavaScript -->
-      </div>
+      <p class="category-subtitle">Innovación para tu hogar</p>
+      <div id="tecnologia-grid" class="product-grid"></div>
     </section>
 
-    <!-- SECCIÓN: BAÑOS Y ACCESORIOS -->
     <section class="category-section" id="banos">
       <div class="category-header">
         <span class="icon">🚿</span>
-        <div>
-          <h2>Baños y Accesorios</h2>
-        </div>
+        <h2>Baños y Accesorios</h2>
       </div>
-      <p class="category-subtitle">Calidad y diseño para tu baño perfecto</p>
-      <div id="banos-grid" class="product-grid">
-        <!-- Los productos se cargarán aquí con JavaScript -->
-      </div>
+      <p class="category-subtitle">Calidad y diseño</p>
+      <div id="banos-grid" class="product-grid"></div>
     </section>
 
-    <!-- SECCIÓN: HERRAMIENTAS MANUALES -->
     <section class="category-section" id="herramientas-manuales">
       <div class="category-header">
         <span class="icon">🔧</span>
-        <div>
-          <h2>Herramientas Manuales</h2>
-        </div>
+        <h2>Herramientas Manuales</h2>
       </div>
-      <p class="category-subtitle">Las mejores herramientas para tus proyectos</p>
-      <div id="herramientas-manuales-grid" class="product-grid">
-        <!-- Los productos se cargarán aquí con JavaScript -->
-      </div>
+      <p class="category-subtitle">Para cada proyecto</p>
+      <div id="herramientas-manuales-grid" class="product-grid"></div>
     </section>
 
-    <!-- SECCIÓN: HERRAMIENTAS ELÉCTRICAS -->
     <section class="category-section" id="herramientas-electricas">
       <div class="category-header">
         <span class="icon">⚡</span>
-        <div>
-          <h2>Herramientas Eléctricas</h2>
-        </div>
+        <h2>Herramientas Eléctricas</h2>
       </div>
-      <p class="category-subtitle">Potencia y precisión en cada trabajo</p>
-      <div id="herramientas-electricas-grid" class="product-grid">
-        <!-- Los productos se cargarán aquí con JavaScript -->
-      </div>
+      <p class="category-subtitle">Potencia y precisión</p>
+      <div id="herramientas-electricas-grid" class="product-grid"></div>
     </section>
 
-    <!-- SECCIÓN: PINTURA Y ACABADOS -->
     <section class="category-section" id="pintura">
       <div class="category-header">
         <span class="icon">🎨</span>
-        <div>
-          <h2>Pintura y Acabados</h2>
-        </div>
+        <h2>Pintura y Acabados</h2>
       </div>
-      <p class="category-subtitle">Dale color y vida a tus espacios</p>
-      <div id="pintura-grid" class="product-grid">
-        <!-- Los productos se cargarán aquí con JavaScript -->
-      </div>
+      <p class="category-subtitle">Dale color a tus espacios</p>
+      <div id="pintura-grid" class="product-grid"></div>
     </section>
 
-    <!-- SECCIÓN: MATERIALES -->
     <section class="category-section" id="materiales">
       <div class="category-header">
         <span class="icon">🔩</span>
-        <div>
-          <h2>Materiales de Construcción</h2>
-        </div>
+        <h2>Materiales de Construcción</h2>
       </div>
-      <p class="category-subtitle">Todo lo que necesitas para construir</p>
-      <div id="materiales-grid" class="product-grid">
-        <!-- Los productos se cargarán aquí con JavaScript -->
-      </div>
+      <p class="category-subtitle">Todo para construir</p>
+      <div id="materiales-grid" class="product-grid"></div>
     </section>
 
-    <!-- SECCIÓN: SEGURIDAD -->
     <section class="category-section" id="seguridad">
       <div class="category-header">
         <span class="icon">🦺</span>
-        <div>
-          <h2>Seguridad Industrial</h2>
-        </div>
+        <h2>Seguridad Industrial</h2>
       </div>
-      <p class="category-subtitle">Protección y seguridad en el trabajo</p>
-      <div id="seguridad-grid" class="product-grid">
-        <!-- Los productos se cargarán aquí con JavaScript -->
-      </div>
+      <p class="category-subtitle">Protección en el trabajo</p>
+      <div id="seguridad-grid" class="product-grid"></div>
     </section>
 
-    <!-- SECCIÓN: ILUMINACIÓN -->
     <section class="category-section" id="iluminacion">
       <div class="category-header">
         <span class="icon">💡</span>
-        <div>
-          <h2>Iluminación</h2>
-        </div>
+        <h2>Iluminación</h2>
       </div>
-      <p class="category-subtitle">Ilumina tu hogar con estilo</p>
-      <div id="iluminacion-grid" class="product-grid">
-        <!-- Los productos se cargarán aquí con JavaScript -->
-      </div>
+      <p class="category-subtitle">Ilumina tu hogar</p>
+      <div id="iluminacion-grid" class="product-grid"></div>
     </section>
 
+    <section class="category-section" id="hogar">
+      <div class="category-header">
+        <span class="icon">🏠</span>
+        <h2>Hogar</h2>
+      </div>
+      <p class="category-subtitle">Comodidad para tu hogar</p>
+      <div id="hogar-grid" class="product-grid"></div>
+    </section>
+
+    <section class="category-section" id="electrico">
+      <div class="category-header">
+        <span class="icon">⚡</span>
+        <h2>Eléctrico</h2>
+      </div>
+      <p class="category-subtitle">Productos eléctricos de calidad</p>
+      <div id="electrico-grid" class="product-grid"></div>
+    </section>
+
+    <section class="category-section" id="mascotas">
+      <div class="category-header">
+        <span class="icon">🐕</span>
+        <h2>Mascotas</h2>
+      </div>
+      <p class="category-subtitle">Todo para tus mascotas</p>
+      <div id="mascotas-grid" class="product-grid"></div>
+    </section>
+
+    <section class="category-section" id="ferreteria">
+      <div class="category-header">
+        <span class="icon">🔩</span>
+        <h2>Ferretería</h2>
+      </div>
+      <p class="category-subtitle">Artículos de ferretería profesional</p>
+      <div id="ferreteria-grid" class="product-grid"></div>
+    </section>
+
+    <section class="category-section" id="automotriz">
+      <div class="category-header">
+        <span class="icon">🚗</span>
+        <h2>Automotriz</h2>
+      </div>
+      <p class="category-subtitle">Partes y accesorios para tu vehículo</p>
+      <div id="automotriz-grid" class="product-grid"></div>
+    </section>
+
+    <section class="category-section" id="pisos">
+      <div class="category-header">
+        <span class="icon">📦</span>
+        <h2>Pisos</h2>
+      </div>
+      <p class="category-subtitle">Baldosas y materiales para pisos</p>
+      <div id="pisos-grid" class="product-grid"></div>
+    </section>
+
+    <section class="category-section" id="plomeria">
+      <div class="category-header">
+        <span class="icon">🔧</span>
+        <h2>Plomería</h2>
+      </div>
+      <p class="category-subtitle">Tuberías y accesorios de plomería</p>
+      <div id="plomeria-grid" class="product-grid"></div>
+    </section>
+
+    <section class="category-section" id="jardin">
+      <div class="category-header">
+        <span class="icon">🌱</span>
+        <h2>Jardín</h2>
+      </div>
+      <p class="category-subtitle">Herramientas y accesorios de jardín</p>
+      <div id="jardin-grid" class="product-grid"></div>
+    </section>
+
+    <section class="category-section" id="limpieza">
+      <div class="category-header">
+        <span class="icon">🧹</span>
+        <h2>Limpieza</h2>
+      </div>
+      <p class="category-subtitle">Productos de limpieza y desinfección</p>
+      <div id="limpieza-grid" class="product-grid"></div>
+    </section>
   </main>
 
-  <a class="whatsapp-fab" href="https://wa.me/1234567890" target="_blank" rel="noopener">WhatsApp</a>
+  <!-- CHATBOT IA (igual que en index.html) -->
+  <div id="ai-chatbot" class="chatbot-container">
+    <button id="chatbot-toggle" class="chatbot-toggle">
+      <span class="icon">🤖</span>
+      <span class="text">Asistente IA</span>
+    </button>
+    <div id="chatbot-window" class="chatbot-window">
+      <div class="chatbot-header">
+        <div>
+          <h3>🤖 Asistente Inteligente</h3>
+          <p>¿Qué producto buscas?</p>
+        </div>
+        <button id="chatbot-close" class="chatbot-close">✕</button>
+      </div>
+      <div id="chatbot-messages" class="chatbot-messages">
+        <div class="message bot-message">
+          <p>¡Hola! 👋 ¿En qué puedo ayudarte?</p>
+        </div>
+      </div>
+      <div class="chatbot-input">
+        <input type="text" id="chatbot-input-field" placeholder="Escribe tu pregunta..." />
+        <button id="chatbot-send">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <a class="whatsapp-fab" href="https://wa.me/593985569688" target="_blank">WhatsApp</a>
 
   <script>
-    // Menu desplegable de categorías
     const menuToggle = document.getElementById('menu-toggle');
     const closeModal = document.getElementById('close-modal');
     const modal = document.getElementById('categories-modal');
     const categoryToggles = document.querySelectorAll('.category-toggle');
 
-    if(menuToggle){
-      menuToggle.addEventListener('click', () => {
-        modal.classList.add('active');
-      });
-    }
-
-    if(closeModal){
-      closeModal.addEventListener('click', () => {
-        modal.classList.remove('active');
-      });
-    }
-
-    modal.addEventListener('click', (e) => {
-      if(e.target === modal) modal.classList.remove('active');
-    });
+    if(menuToggle) menuToggle.addEventListener('click', () => modal.classList.add('active'));
+    if(closeModal) closeModal.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
 
     categoryToggles.forEach(toggle => {
       toggle.addEventListener('click', () => {
         const subcategories = toggle.nextElementSibling;
-        
-        // Close all other subcategories
         document.querySelectorAll('.subcategories-list.active').forEach(sub => {
-          if(sub !== subcategories){
-            sub.classList.remove('active');
-            sub.previousElementSibling.classList.remove('active');
-          }
+          if(sub !== subcategories) sub.classList.remove('active');
         });
-        
-        // Toggle current
         subcategories.classList.toggle('active');
         toggle.classList.toggle('active');
       });
     });
 
-    // Función para cerrar modal y hacer scroll
     function closeModalAndScroll(sectionId) {
       modal.classList.remove('active');
       const section = document.getElementById(sectionId);
-      if(section) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      if(section) section.scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 
   <script src="scripts/products.js"></script>
+  <script src="scripts/chatbot.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>
