@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Su Centro Ferretero — Inicio</title>
+  <link rel="icon" href="images/logoSucentro.png" type="image/png" />
   <link rel="stylesheet" href="styles/style.css?v=5" />
   <link rel="stylesheet" href="styles/shared-styles.css?v=5" />
   <link rel="stylesheet" href="styles/animations.css?v=5" />
@@ -487,9 +488,20 @@
     const modal = document.getElementById('categories-modal');
     const categoryToggles = document.querySelectorAll('.category-toggle');
 
-    if(menuToggle) menuToggle.addEventListener('click', () => modal.classList.add('active'));
-    if(closeModal) closeModal.addEventListener('click', () => modal.classList.remove('active'));
-    modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
+    if(menuToggle){
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.addEventListener('click', () => {
+        if(!modal) return;
+        const nowOpen = modal.classList.toggle('active');
+        menuToggle.setAttribute('aria-expanded', nowOpen ? 'true' : 'false');
+      });
+    }
+    if(closeModal) closeModal.addEventListener('click', () => {
+      if(!modal) return;
+      modal.classList.remove('active');
+      if(menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+    });
+    if(modal) modal.addEventListener('click', (e) => { if(e.target === modal){ modal.classList.remove('active'); if(menuToggle) menuToggle.setAttribute('aria-expanded', 'false'); } });
 
     categoryToggles.forEach(toggle => {
       toggle.addEventListener('click', () => {
