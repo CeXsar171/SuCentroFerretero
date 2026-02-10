@@ -11,9 +11,9 @@
     .branches-hero{padding:2rem 0;text-align:center}
     .branches-hero h2{margin:0 0 0.5rem 0;font-size:2rem;color:#0f172a}
     .branches-hero p{color:#6b7280;margin:0}
-    .map-section{display:grid;grid-template-columns:2fr 1fr;gap:2rem;margin:2rem 0;align-items:start}
-    .map{height:500px;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(12,18,30,0.08)}
-    .branch-list{display:flex;flex-direction:column;gap:1.5rem}
+    .map-section{display:grid;grid-template-columns:2fr 1fr;gap:2rem;margin:2rem 0;align-items:start;position:relative;z-index:1}
+    .map{height:500px;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(12,18,30,0.08);position:relative;z-index:2}
+    .branch-list{display:flex;flex-direction:column;gap:1.5rem;position:relative;z-index:3}
     .branch-card{background:var(--card);padding:1.5rem;border-radius:10px;box-shadow:0 4px 12px rgba(12,18,30,0.06);border-left:4px solid var(--accent);transition:all 300ms ease}
     .branch-card:hover{box-shadow:0 8px 20px rgba(12,18,30,0.12);transform:translateY(-2px)}
     .branch-card h3{margin:0 0 0.75rem 0;color:var(--accent);font-size:1.1rem}
@@ -21,6 +21,7 @@
     .branch-info p{margin:0;color:#6b7280}
     .branch-info strong{color:#0f172a}
     .leaflet-popup-content{font-size:0.9rem}
+    .leaflet-container{z-index:1 !important}
     @media(max-width:900px){
       .map-section{grid-template-columns:1fr}
       .map{height:350px}
@@ -96,8 +97,8 @@
     <img src="RedesSociales/instagram.png" alt="Instagram">
   </a>
 
-  <a href="#">
-    <img src="RedesSociales/youtube.png" alt="YouTube">
+  <a href="mailto:sucentroferretero@gmail.com">
+    <img src="RedesSociales/gmail.png" alt="gmail">
   </a>
 </div>
       </div>
