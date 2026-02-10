@@ -47,10 +47,10 @@
         <a href="branches.html">Sucursales</a>
       </nav>
       <div class="header-search">
-        <div class="search-box" style="position: relative;">
+        <div class="search-box" style="position:relative;">
           <button id="header-search-btn" class="search-btn">🔍</button>
           <input id="header-search" type="search" placeholder="Busca tu producto" />
-          <div id="search-suggestions" class="search-suggestions" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #e6e9ef; border-radius:6px; max-height:300px; overflow-y:auto; z-index:1000; box-shadow:0 4px 6px rgba(0,0,0,0.1);"></div>
+          <div id="search-suggestions" style="display:none; position:absolute; top:100%; left:0; right:0; background:#fff; border:1px solid #e6e9ef; border-radius:6px; max-height:320px; overflow:auto; z-index:1200; box-shadow:0 6px 18px rgba(0,0,0,0.08);"></div>
         </div>
       </div>
     </div>
@@ -68,13 +68,13 @@
       const input = document.getElementById('header-search');
       const btn = document.getElementById('header-search-btn');
       const suggestionsDiv = document.getElementById('search-suggestions');
-      
+
       function doSearch(){
-        if(!productsReady) return;
-        suggestionsDiv.style.display = 'none';
-        
+        if(!window.productsRendered && !productsReady) return; // Esperar a que los productos se carguen
+
         const q = (input && input.value || '').trim();
         if(!q) {
+          // Si está vacío, mostrar todos los productos
           const sections = document.querySelectorAll('.category-section');
           sections.forEach(section => {
             section.style.display = '';
@@ -84,97 +84,79 @@
           });
           return;
         }
-        
+
+        // Aplicar filtro de búsqueda
         if(typeof filterProductsBySearch === 'function') {
           filterProductsBySearch(q);
         }
       }
-      
+
+      // Mostrar sugerencias en products.html
       function showSuggestions(){
-        if(!productsReady) return;
-        
+        // Usar la función getSuggestions (usa los datos de PRODUCTOS_POR_CATEGORIA)
+        if(typeof getSuggestions !== 'function') return;
         const q = (input && input.value || '').trim();
-        if(!q) {
-          suggestionsDiv.style.display = 'none';
-          return;
-        }
-        
-        if(typeof getSuggestions === 'function') {
-          const suggestions = getSuggestions(q);
-          
-          if(suggestions.length === 0) {
-            suggestionsDiv.style.display = 'none';
-            return;
-          }
-          
-          suggestionsDiv.innerHTML = '';
-          
-          // Agrupar sugerencias por tipo
-          const grouped = { suggestions: [], categories: [] };
-          suggestions.forEach(s => {
-            if(s.type === 'suggestion') grouped.suggestions.push(s);
-            else if(s.type === 'category') grouped.categories.push(s);
-          });
-          
-          // Mostrar sugerencias directas
-          if(grouped.suggestions.length > 0) {
-            const header = document.createElement('div');
-            header.style.cssText = 'padding:0.75rem 1rem; font-weight:bold; color:#6b7280; font-size:0.85rem; border-bottom:1px solid #e6e9ef;';
-            header.textContent = 'SUGERENCIAS';
-            suggestionsDiv.appendChild(header);
-            
-            grouped.suggestions.forEach(s => {
-              const item = document.createElement('div');
-              item.style.cssText = 'padding:0.75rem 1rem; cursor:pointer; border-bottom:1px solid #f3f4f6; transition:background 0.2s;';
-              item.textContent = s.text;
-              item.onmouseover = () => item.style.background = '#f9fafb';
-              item.onmouseout = () => item.style.background = '';
-              item.onclick = () => {
-                input.value = s.text;
+        if(!q) { suggestionsDiv.style.display = 'none'; return; }
+        const suggestions = getSuggestions(q);
+        if(!suggestions || suggestions.length === 0) { suggestionsDiv.style.display = 'none'; return; }
+
+        suggestionsDiv.innerHTML = '';
+        // separar sugerencias directas (productos) y categorías
+        const productSugs = suggestions.filter(s => s.type === 'suggestion');
+        const categorySugs = suggestions.filter(s => s.type === 'category');
+
+        if(productSugs.length > 0) {
+          const header = document.createElement('div');
+          header.style.cssText = 'padding:0.6rem 1rem; font-weight:700; color:#111827;';
+          header.textContent = 'SUGERENCIAS';
+          suggestionsDiv.appendChild(header);
+          productSugs.forEach(s => {
+            const item = document.createElement('div');
+            item.style.cssText = 'padding:0.6rem 1rem; cursor:pointer; border-top:1px solid #f3f4f6;';
+            item.textContent = s.text;
+            item.onclick = () => {
+              input.value = s.text;
+              // intentar abrir producto si está renderizado
+              if(typeof goToProduct === 'function') {
+                const opened = goToProduct(s.text);
+                if(!opened) doSearch();
+              } else {
                 doSearch();
-              };
-              suggestionsDiv.appendChild(item);
-            });
-          }
-          
-          // Mostrar categorías
-          if(grouped.categories.length > 0) {
-            grouped.categories.forEach(cat => {
-              const catHeader = document.createElement('div');
-              catHeader.style.cssText = 'padding:0.75rem 1rem; font-weight:bold; color:#1f2937; font-size:0.85rem; background:#f9fafb; border-top:1px solid #e6e9ef;';
-              catHeader.textContent = cat.category;
-              suggestionsDiv.appendChild(catHeader);
-              
-              cat.items.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.style.cssText = 'padding:0.75rem 1rem; cursor:pointer; border-bottom:1px solid #f3f4f6; transition:background 0.2s; padding-left:2rem;';
-                itemDiv.textContent = item;
-                itemDiv.onmouseover = () => itemDiv.style.background = '#f9fafb';
-                itemDiv.onmouseout = () => itemDiv.style.background = '';
-                itemDiv.onclick = () => {
-                  input.value = item;
-                  doSearch();
-                };
-                suggestionsDiv.appendChild(itemDiv);
-              });
-            });
-          }
-          
-          suggestionsDiv.style.display = 'block';
+              }
+              suggestionsDiv.style.display = 'none';
+            };
+            suggestionsDiv.appendChild(item);
+          });
         }
+
+        if(categorySugs.length > 0) {
+          categorySugs.forEach(cat => {
+            const catHeader = document.createElement('div');
+            catHeader.style.cssText = 'padding:0.5rem 1rem; font-weight:600; color:#374151; background:#f9fafb; border-top:1px solid #e6e9ef;';
+            catHeader.textContent = cat.category.toUpperCase();
+            suggestionsDiv.appendChild(catHeader);
+            cat.items.forEach(it => {
+              const itDiv = document.createElement('div');
+              itDiv.style.cssText = 'padding:0.5rem 1rem; cursor:pointer; border-top:1px solid #f3f4f6; padding-left:1.25rem;';
+              itDiv.textContent = it;
+              itDiv.onclick = () => { input.value = it; doSearch(); suggestionsDiv.style.display = 'none'; };
+              suggestionsDiv.appendChild(itDiv);
+            });
+          });
+        }
+
+        suggestionsDiv.style.display = 'block';
       }
-      
+
       if(btn) btn.addEventListener('click', doSearch);
       if(input) {
         input.addEventListener('keypress', (e)=>{ if(e.key === 'Enter') doSearch(); });
+        // Mostrar sugerencias mientras escribe (no buscar todavía)
         input.addEventListener('input', showSuggestions);
       }
-      
-      // Cerrar sugerencias al hacer clic fuera
+      // cerrar sugerencias al click fuera
       document.addEventListener('click', (e) => {
-        if(e.target !== input && e.target !== suggestionsDiv) {
-          suggestionsDiv.style.display = 'none';
-        }
+        if(e.target !== input && e.target !== suggestionsDiv) suggestionsDiv.style.display = 'none';
       });
     })();
   </script>
@@ -241,6 +223,12 @@
   </div>
 
   <main class="container">
+    <section id="search-results" class="search-results" style="display:none; margin:2rem 0;">
+      <div class="category-header">
+        <h2 id="search-results-title">Resultados de búsqueda</h2>
+      </div>
+      <div id="search-results-grid" class="product-grid"></div>
+    </section>
     <section class="category-section" id="tecnologia">
       <div class="category-header">
         <span class="icon">📺</span>

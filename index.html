@@ -23,9 +23,10 @@
       </nav>
 
       <div class="header-search" role="search">
-        <div class="search-box">
+        <div class="search-box" style="position:relative;">
           <button id="header-search-btn" class="search-btn search-icon" aria-label="Buscar">🔍</button>
           <input id="header-search" type="search" placeholder="Busca tu producto" aria-label="Buscar" />
+          <div id="search-suggestions" style="display:none; position:absolute; top:100%; left:0; right:0; background:#fff; border:1px solid #e6e9ef; border-radius:6px; max-height:320px; overflow:auto; z-index:1200; box-shadow:0 6px 18px rgba(0,0,0,0.08);"></div>
         </div>
       </div>
 
@@ -37,7 +38,13 @@
     (function(){
       const input = document.getElementById('header-search');
       const btn = document.getElementById('header-search-btn');
+      const suggestionsDiv = document.getElementById('search-suggestions');
       
+      // Palabras clave sugeridas (categorías y populares)
+      const KEYWORDS = [
+        'cama','HOGAR','DEPORTES Y AIRE LIBRE','EQUIPOS PARA ACAMPAR',
+        'Herramientas','Tecnología','Baños','Luz','Martillo','Cámara'
+      ];
       // Función para filtrar por categoría
       window.filterByCategory = function(category) {
         // Limpiar filtros anteriores
@@ -91,6 +98,25 @@
       }
       if(btn) btn.addEventListener('click', doSearch);
       if(input) input.addEventListener('keypress', (e)=>{ if(e.key === 'Enter') doSearch(); });
+      
+      // Sugerencias en index: mostrar keywords y redirigir a products.html
+      function showIndexSuggestions(){
+        const q = (input && input.value || '').trim();
+        if(!q) { suggestionsDiv.style.display = 'none'; return; }
+        const n = q.toLowerCase();
+        const matches = KEYWORDS.filter(k => k.toLowerCase().includes(n)).slice(0,8);
+        if(matches.length === 0) { suggestionsDiv.style.display = 'none'; return; }
+        suggestionsDiv.innerHTML = '';
+        matches.forEach(m => {
+          const item = document.createElement('div');
+          item.style.cssText = 'padding:0.75rem 1rem; cursor:pointer; border-bottom:1px solid #f3f4f6;';
+          item.textContent = m;
+          item.onclick = () => { sessionStorage.setItem('globalSearch', m); window.location.href = 'products.html'; };
+          suggestionsDiv.appendChild(item);
+        });
+        suggestionsDiv.style.display = 'block';
+      }
+      if(input) input.addEventListener('input', showIndexSuggestions);
     })();
   </script>
 

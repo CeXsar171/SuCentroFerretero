@@ -209,6 +209,8 @@ function renderCategoryProducts(category, gridId, sectionId) {
     const card = document.createElement('article');
     card.className = 'product-card fade-up';
     card.style.cursor = 'pointer';
+    card.setAttribute('data-product-name', product.name);
+    card.setAttribute('data-product-description', product.description || '');
     card.innerHTML = `
       <img src="${product.image}" alt="${product.name}" loading="lazy" />
       <div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;">
@@ -286,7 +288,20 @@ function showProductDetail(product) {
   document.body.appendChild(modal);
 }
 
-// Cargar productos al iniciar
+// Función para ir a un producto desde sugerencias
+window.goToProduct = function(productName) {
+  const normalizedName = normalizeText(productName);
+  const cards = document.querySelectorAll('.product-card');
+  
+  for(let card of cards) {
+    if(normalizeText(card.getAttribute('data-product-name') || '') === normalizedName) {
+      card.click();
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return true;
+    }
+  }
+  return false;
+};
 document.addEventListener('DOMContentLoaded', () => {
   // Leer filtros de sessionStorage
   const filterCategory = sessionStorage.getItem('filterCategory');
@@ -352,6 +367,8 @@ document.addEventListener('DOMContentLoaded', () => {
       filterProductsBySearch(query);
     });
   }
+  // Indicar que los productos ya fueron renderizados
+  window.productsRendered = true;
 });
 
 // Función para filtrar productos por marca
@@ -421,67 +438,148 @@ function getSimilarity(str1, str2) {
   return 1 - (differences / len);
 }
 
-// Función para filtrar productos por búsqueda con búsqueda inteligente
+// Función para generar sugerencias mientras el usuario escribe
+function getSuggestions(query) {
+  if(!query || query.length < 1) return [];
+
+  const normalizedQuery = normalizeText(query);
+  const suggestions = [];
+  const seen = new Set();
+
+  // Recorrer los productos a partir de los datos (no del DOM)
+  for(const [categoryName, products] of Object.entries(PRODUCTOS_POR_CATEGORIA)) {
+    const matching = [];
+    for(const p of products) {
+      const name = p.name || '';
+      const normalizedName = normalizeText(name);
+      if(normalizedName.includes(normalizedQuery)) {
+        if(!seen.has(name)) {
+          suggestions.push({ type: 'suggestion', text: name, category: categoryName });
+          seen.add(name);
+        }
+        matching.push(name);
+      }
+    }
+
+    if(matching.length > 0) {
+      // agregar categoría con hasta 3 items que coincidan
+      suggestions.push({ type: 'category', category: categoryName, items: matching.slice(0,3) });
+    }
+  }
+
+  // Priorizar sugerencias directas (productos) y limitar total
+  const productSugs = suggestions.filter(s => s.type === 'suggestion').slice(0,6);
+  const categorySugs = suggestions.filter(s => s.type === 'category').slice(0,6);
+  return [...productSugs, ...categorySugs].slice(0, 15);
+}
+
+// Función para filtrar productos por búsqueda — compare SOLO con el NOMBRE del producto
 function filterProductsBySearch(query) {
+  // Si no hay query, restaurar todo
   if(!query) {
     document.querySelectorAll('.category-section').forEach(section => {
       section.style.display = '';
-      section.querySelectorAll('.product-card').forEach(card => {
-        card.style.display = '';
-      });
+      const grid = section.querySelector('.product-grid');
+      const sectionId = section.id;
+      const catName = Object.keys(PRODUCTOS_POR_CATEGORIA).find(n => normalizeText(n).replace(/\s+/g,'-') === sectionId) || null;
+      if(catName && grid) {
+        // volver a renderizar primeros X productos
+        const products = PRODUCTOS_POR_CATEGORIA[catName] || [];
+        grid.innerHTML = '';
+        const toShow = viewState[sectionId] ? viewState[sectionId].showing : products.length;
+        products.slice(0, toShow).forEach(p => {
+          const card = document.createElement('article');
+          card.className = 'product-card fade-up';
+          card.style.cursor = 'pointer';
+          card.setAttribute('data-product-name', p.name);
+          card.setAttribute('data-product-description', p.description || '');
+          card.innerHTML = `
+            <img src="${p.image}" alt="${p.name}" loading="lazy" />
+            <div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;">
+              <div>
+                <p style="color:#6b7280; font-size:0.85rem; margin:0 0 0.25rem 0; font-weight:600; text-transform:uppercase;">${p.brand}</p>
+                <strong style="font-size:1rem; line-height:1.3;">${p.name}</strong>
+                <p style="color:#6b7280; font-size:0.75rem; margin:0.25rem 0;">SKU: ${p.sku}</p>
+              </div>
+              <div style="margin-top:auto;">
+                <span class="badge ${p.inStock ? 'in' : 'out'}">${p.inStock ? '✓ En Stock' : '✗ Agotado'}</span>
+              </div>
+            </div>`;
+          card.addEventListener('click', () => showProductDetail(p));
+          grid.appendChild(card);
+        });
+      }
     });
     return;
   }
-  
+
   const normalizedQuery = normalizeText(query);
-  const queryWords = normalizedQuery.split(/\s+/);
-  
-  document.querySelectorAll('.category-section').forEach(section => {
-    const products = section.querySelectorAll('.product-card');
-    let hasVisibleProducts = false;
-    
-    products.forEach(card => {
-      const text = normalizeText(card.textContent);
-      let isMatch = false;
-      
-      // Buscar coincidencias para cada palabra de la búsqueda
-      for(let queryWord of queryWords) {
-        // Búsqueda exacta (después de normalizar)
-        if(text.includes(queryWord)) {
-          isMatch = true;
-          break;
-        }
-        
-        // Buscar palabras relacionadas
-        if(WORD_ALIASES[queryWord]) {
-          for(let alias of WORD_ALIASES[queryWord]) {
-            if(text.includes(normalizeText(alias))) {
-              isMatch = true;
-              break;
-            }
+  const qwords = normalizedQuery.split(/\s+/).filter(Boolean);
+
+  // Construir lista unificada de coincidencias (todas las categorías)
+  const unifiedMatches = [];
+  for(const [categoryName, products] of Object.entries(PRODUCTOS_POR_CATEGORIA)) {
+    for(const p of products) {
+      const name = normalizeText(p.name || '');
+      let matched = false;
+      for(const qw of qwords) {
+        if(name.includes(qw)) { matched = true; break; }
+        if(WORD_ALIASES[qw]) {
+          for(const alias of WORD_ALIASES[qw]) {
+            if(name.includes(normalizeText(alias))) { matched = true; break; }
           }
-          if(isMatch) break;
+          if(matched) break;
         }
-        
-        // Búsqueda parcial (si contiene más de 2 caracteres)
-        if(queryWord.length > 2) {
-          const words = text.split(/\s+/);
-          for(let word of words) {
-            // Similitud mínima del 70%
-            if(getSimilarity(queryWord, word) > 0.7) {
-              isMatch = true;
-              break;
-            }
+        if(qw.length > 2) {
+          const nameWords = name.split(/\s+/);
+          for(const nw of nameWords) {
+            if(getSimilarity(qw, nw) > 0.8) { matched = true; break; }
           }
-          if(isMatch) break;
+          if(matched) break;
         }
       }
-      
-      card.style.display = isMatch ? '' : 'none';
-      if(isMatch) hasVisibleProducts = true;
-    });
-    
-    // Mostrar u ocultar la sección si tiene productos visibles
-    section.style.display = hasVisibleProducts ? '' : 'none';
+      if(matched) unifiedMatches.push({ product: p, category: categoryName });
+    }
+  }
+
+  // Mostrar resultados en una sola sección
+  const resultsSection = document.getElementById('search-results');
+  const resultsGrid = document.getElementById('search-results-grid');
+  if(!resultsSection || !resultsGrid) return;
+
+  // Ocultar secciones por categoría
+  document.querySelectorAll('.category-section').forEach(sec => sec.style.display = 'none');
+
+  resultsGrid.innerHTML = '';
+  if(unifiedMatches.length === 0) {
+    resultsSection.style.display = 'block';
+    document.getElementById('search-results-title').textContent = `No se encontraron resultados para "${query}"`;
+    return;
+  }
+
+  document.getElementById('search-results-title').textContent = `Resultados para "${query}"`;
+  unifiedMatches.forEach(item => {
+    const p = item.product;
+    const card = document.createElement('article');
+    card.className = 'product-card fade-up';
+    card.style.cursor = 'pointer';
+    card.setAttribute('data-product-name', p.name);
+    card.setAttribute('data-product-description', p.description || '');
+    card.innerHTML = `
+      <img src="${p.image}" alt="${p.name}" loading="lazy" />
+      <div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;">
+        <div>
+          <p style="color:#6b7280; font-size:0.85rem; margin:0 0 0.25rem 0; font-weight:600; text-transform:uppercase;">${p.brand}</p>
+          <strong style="font-size:1rem; line-height:1.3;">${p.name}</strong>
+          <p style="color:#6b7280; font-size:0.75rem; margin:0.25rem 0;">SKU: ${p.sku}</p>
+        </div>
+        <div style="margin-top:auto;">
+          <span class="badge ${p.inStock ? 'in' : 'out'}">${p.inStock ? '✓ En Stock' : '✗ Agotado'}</span>
+        </div>
+      </div>`;
+    card.addEventListener('click', () => showProductDetail(p));
+    resultsGrid.appendChild(card);
   });
+
+  resultsSection.style.display = 'block';
 }
