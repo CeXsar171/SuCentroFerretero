@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Aplicar filtrado de marca
   if(filterBrand) {
-    filterProductsByBrand(filterBrand);
+    showBrandOnly(filterBrand);
     sessionStorage.removeItem('filterBrand');
   }
   
@@ -393,6 +393,80 @@ function filterProductsByBrand(brand) {
     // Mostrar u ocultar la sección si tiene productos de la marca
     section.style.display = hasProductsFromBrand ? '' : 'none';
   });
+}
+
+// Renderizar una lista plana de productos (sin secciones por categoría)
+function renderFlatProducts(products, title) {
+  // Ocultar secciones existentes
+  document.querySelectorAll('.category-section').forEach(sec => sec.style.display = 'none');
+
+  // Crear o reutilizar la sección de resultados por marca
+  let container = document.getElementById('brand-results');
+  if(!container) {
+    container = document.createElement('section');
+    container.className = 'category-section';
+    container.id = 'brand-results';
+    container.innerHTML = `
+      <div class="container">
+        <div class="category-header">
+          <h2 id="brand-results-title">${title}</h2>
+        </div>
+        <p class="category-subtitle" id="brand-results-subtitle"></p>
+        <div id="brand-results-grid" class="product-grid"></div>
+      </div>
+    `;
+    const main = document.querySelector('main');
+    if(main) main.insertBefore(container, main.firstChild);
+  } else {
+    container.style.display = '';
+    const titleEl = container.querySelector('#brand-results-title');
+    if(titleEl) titleEl.textContent = title;
+  }
+
+  const grid = document.getElementById('brand-results-grid');
+  grid.innerHTML = '';
+
+  if(!products || products.length === 0) {
+    grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#6b7280; padding:2rem;">No hay productos para esta marca.</p>';
+    return;
+  }
+
+  products.forEach(product => {
+    const card = document.createElement('article');
+    card.className = 'product-card fade-up';
+    card.style.cursor = 'pointer';
+    card.setAttribute('data-product-name', product.name);
+    card.setAttribute('data-product-description', product.description || '');
+    card.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" loading="lazy" />
+      <div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;">
+        <div>
+          <p style="color:#6b7280; font-size:0.85rem; margin:0 0 0.25rem 0; font-weight:600; text-transform:uppercase;">${product.brand}</p>
+          <strong style="font-size:1rem; line-height:1.3;">${product.name}</strong>
+          <p style="color:#6b7280; font-size:0.75rem; margin:0.25rem 0;">SKU: ${product.sku}</p>
+        </div>
+        <div style="margin-top:auto;">
+          <span class="badge ${product.inStock ? 'in' : 'out'}">${product.inStock ? '✓ En Stock' : '✗ Agotado'}</span>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => showProductDetail(product));
+    grid.appendChild(card);
+  });
+}
+
+// Mostrar sólo productos de una marca en vista plana
+function showBrandOnly(brand) {
+  const matches = [];
+  for(const [cat, products] of Object.entries(PRODUCTOS_POR_CATEGORIA)) {
+    for(const p of products) {
+      if((p.brand || '').toLowerCase() === (brand || '').toLowerCase()) {
+        matches.push(p);
+      }
+    }
+  }
+
+  renderFlatProducts(matches, `Resultados para: ${brand}`);
 }
 
 // Función para normalizar tildes y caracteres especiales
