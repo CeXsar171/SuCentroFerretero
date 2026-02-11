@@ -90,11 +90,6 @@ const KNOWLEDGE_BASE = {
     respuesta: 'Para consultar precios y disponibilidad, puedes:\n\n💬 Contactarnos por WhatsApp\n📞 Llamar a cualquiera de nuestras sucursales\n🏢 Visitarnos personalmente\n\n¿Te gustaría que te pase el contacto de WhatsApp?'
   }
   ,
-  'envio': {
-    keywords: ['envío', 'envio', 'domicilio', 'entrega', 'reparto', 'envio a domicilio'],
-    productos: [],
-    respuesta: 'Realizamos envíos únicamente dentro de Latacunga y ofrecemos recogida en tienda. Los tiempos y costos dependen de la dirección. ¿A qué sector de Latacunga deseas el envío?'
-  },
   'devoluciones': {
     keywords: ['devolución', 'devoluciones', 'devolver', 'cambio', 'reclamo'],
     productos: [],
